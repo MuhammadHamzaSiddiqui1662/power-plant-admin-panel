@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.nav-link {
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 8px;
+}
+
+.nav-link.active {
+  color: #fff;
+  background-color: #6bb955;
+  box-shadow: 0px 2px 5px #99999955;
+}
+
+.bg-pattern {
+  --background-base: rgb(245, 245, 248);
+  --background-hover: rgb(0, 0, 0, 0.04);
+  background: linear-gradient(
+      135deg,
+      var(--background-base) 22px,
+      var(--background-hover) 22px,
+      var(--background-hover) 24px,
+      transparent 24px,
+      transparent 67px,
+      var(--background-hover) 67px,
+      var(--background-hover) 69px,
+      transparent 69px
+    ),
+    linear-gradient(
+        225deg,
+        var(--background-base) 22px,
+        var(--background-hover) 22px,
+        var(--background-hover) 24px,
+        transparent 24px,
+        transparent 67px,
+        var(--background-hover) 67px,
+        var(--background-hover) 69px,
+        transparent 69px
+      )
+      0 64px;
+  background-color: var(--background-base);
+  background-size: 64px 128px;
+}
+
+.a {
+  border-radius: 0.5rem;
+  background-color: #fff;
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  box-shadow: 0 0 #0000, 0 0 #0000, var(--tw-shadow);
+}
