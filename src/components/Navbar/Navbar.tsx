@@ -85,6 +85,82 @@ export default function Navbar({ width }: { width?: number }) {
               </ListItemButton>
             </NavLink>
           </ListItem>
+
+          <ListSubheader>Ips</ListSubheader>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.ip}/${ROUTES.published}`}
+              className={`nav-link${
+                searchParams.get(SEARCH_PARAMS.status) &&
+                searchParams.get(SEARCH_PARAMS.status) === ROUTES.published
+                  ? " active"
+                  : ""
+              }`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <DownloadingIcon />
+                </ListItemIcon>
+                <ListItemText>Published</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.ip}/${ROUTES.inactive}`}
+              className={`nav-link${
+                searchParams.get(SEARCH_PARAMS.status) &&
+                searchParams.get(SEARCH_PARAMS.status) === ROUTES.inactive
+                  ? " active"
+                  : ""
+              }`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <DownloadingIcon />
+                </ListItemIcon>
+                <ListItemText>In Active</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.ip}/${ROUTES.draft}`}
+              className={`nav-link${
+                searchParams.get(SEARCH_PARAMS.status) &&
+                searchParams.get(SEARCH_PARAMS.status) === ROUTES.draft
+                  ? " active"
+                  : ""
+              }`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <DownloadingIcon />
+                </ListItemIcon>
+                <ListItemText>Draft</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.ip}/${ROUTES.appliedForPatent}`}
+              className={`nav-link${
+                searchParams.get(SEARCH_PARAMS.status) &&
+                searchParams.get(SEARCH_PARAMS.status) ===
+                  ROUTES.appliedForPatent
+                  ? " active"
+                  : ""
+              }`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <DownloadingIcon />
+                </ListItemIcon>
+                <ListItemText>Applied For Patent</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+
           <ListSubheader>Auth</ListSubheader>
           <ListItem>
             <NavLink to={ROUTES.profile} className={"nav-link"}>

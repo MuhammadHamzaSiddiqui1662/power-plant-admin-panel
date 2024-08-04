@@ -59,3 +59,9 @@ export enum SaleDeedStatus {
   PaymentVerified = 9,
   ChallanPendingKDA = 10,
 }
+export enum IpStatus {
+  Published = "Published",
+  AppliedForPatent = "AppliedForPatent",
+  InActive = "InActive",
+  Draft = "Draft",
+}

@@ -3,11 +3,13 @@ import authSlice from "../features/auth/authSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
 import saleDeedSlice from "../features/saleDeed/saleDeedSlice";
+import ipSlice from "../features/ip/ipSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
     saleDeed: saleDeedSlice,
+    ip: ipSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   devTools: true,

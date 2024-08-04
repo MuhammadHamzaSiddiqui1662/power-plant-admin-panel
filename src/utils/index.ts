@@ -1,4 +1,5 @@
 import { Data, SaleDeed } from "../types/saleDeed";
+import { IP } from "../types/ip";
 
 export const formatRows = (saleDeeds: SaleDeed[]): Data[] =>
   saleDeeds.map((saleDeed) => ({
@@ -8,3 +9,12 @@ export const formatRows = (saleDeeds: SaleDeed[]): Data[] =>
     totalAmount: saleDeed.saleDeedTotalAmount,
     advanceAmount: 0,
   }));
+
+export const formatIPRows = (ips: IP[]) => {
+  return ips.map((ip) => ({
+    id: ip.id,
+    name: ip.name,
+    price: ip.price,
+    status: ip.status,
+  }));
+};

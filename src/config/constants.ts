@@ -11,6 +11,11 @@ export const ROUTES = {
   inProgress: "in-progress",
   saleDeed: ":saleDeedId",
   profile: "profile",
+  ip: "ip",
+  published: "published",
+  inactive: "inactive",
+  draft: "draft",
+  appliedForPatent: "appliedForPatent",
 };
 
 export const SEARCH_PARAMS = {
@@ -52,4 +57,15 @@ export const COLUMNS: Column[] = [
     format: (value: number) =>
       value.toLocaleString("en-US", { style: "currency", currency: "PKR" }),
   },
+];
+
+export const IP_COLUMNS = [
+  { id: "name", label: "Name", minWidth: 170 },
+  {
+    id: "price",
+    label: "Price",
+    minWidth: 100,
+    format: (value: number) => `$${value.toFixed(2)}`,
+  },
+  { id: "status", label: "Status", minWidth: 100 },
 ];

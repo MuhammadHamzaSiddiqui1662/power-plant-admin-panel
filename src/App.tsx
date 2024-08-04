@@ -4,6 +4,7 @@ import { ROUTES } from "./config/constants";
 import Body from "./Body";
 import Pending from "./pages/Cases/Pending/Pending";
 import InProgress from "./pages/Cases/InProgress/InProgress";
+import Published from "./pages/Ip/Published/published";
 import SaleDeed from "./pages/Cases/SaleDeed/SaleDeed";
 import Profile from "./pages/Profile/Profile";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -11,6 +12,9 @@ import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import VerifyOtp from "./pages/VerifyOtp/VerifyOtp";
 import "./App.css";
+import InactiveIPs from "./pages/Ip/Inactive/inActive";
+import DraftIPs from "./pages/Ip/Draft/draft";
+import AppliedForPatentIPs from "./pages/Ip/AppliedForPatent/appliedForPatent";
 
 function App() {
   useEffect(() => {
@@ -46,6 +50,7 @@ function App() {
           path: ROUTES.profile,
           element: <Profile />,
         },
+
         {
           path: ROUTES.cases,
           element: <Outlet />,
@@ -61,6 +66,28 @@ function App() {
             {
               path: ROUTES.inProgress,
               element: <InProgress />,
+            },
+          ],
+        },
+        {
+          path: ROUTES.ip,
+          element: <Outlet />,
+          children: [
+            {
+              path: ROUTES.published,
+              element: <Published />,
+            },
+            {
+              path: ROUTES.inactive,
+              element: <InactiveIPs />,
+            },
+            {
+              path: ROUTES.draft,
+              element: <DraftIPs />,
+            },
+            {
+              path: ROUTES.appliedForPatent,
+              element: <AppliedForPatentIPs />,
             },
           ],
         },
