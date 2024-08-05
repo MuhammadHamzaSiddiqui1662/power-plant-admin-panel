@@ -2,13 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "../features/auth/authSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
-import saleDeedSlice from "../features/saleDeed/saleDeedSlice";
+// import saleDeedSlice from "../features/saleDeed/saleDeedSlice";
 import ipSlice from "../features/ip/ipSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
-    saleDeed: saleDeedSlice,
+    // saleDeed: saleDeedSlice,
     ip: ipSlice,
   },
   // @ts-ignore

@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Header from "./components/Header/Header";
 import { useEffect } from "react";
 import { useAppDispatch } from "./config/store";
-import { getSaleDeedsThunk } from "./features/saleDeed/saleDeedSlice";
+// import { getSaleDeedsThunk } from "./features/saleDeed/saleDeedSlice";
 import { getIPsThunk } from "./features/ip/ipSlice";
 
 const headerHeight = 64;
@@ -14,7 +14,7 @@ export default function Body() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSaleDeedsThunk());
+    // dispatch(getSaleDeedsThunk());
     dispatch(getIPsThunk());
   }, []);
 
