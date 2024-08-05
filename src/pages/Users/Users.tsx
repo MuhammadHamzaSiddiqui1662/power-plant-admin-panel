@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import StickyHeadTable from "../../components/Table/StickyHeadTable";
 import { useNavigate } from "react-router-dom";
-import { ROUTES, SEARCH_PARAMS, USERS_COLUMNS } from "../../config/constants";
+import { ROUTES, USERS_COLUMNS } from "../../config/constants";
 import { useAppSelector } from "../../config/store";
 import { formatUserRows } from "../../utils";
 
@@ -10,7 +10,7 @@ export default function Users() {
   const data = useAppSelector((state) => state.user.users);
 
   const handleRowClick = (row: any) => {
-    navigate(`../${row.id}?${SEARCH_PARAMS.status}=${ROUTES.published}`);
+    navigate(`/${ROUTES.users}/${row.id}`);
   };
 
   return (

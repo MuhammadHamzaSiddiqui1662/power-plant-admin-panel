@@ -18,6 +18,7 @@ import AppliedForPatentIPs from "./pages/Ip/AppliedForPatent/appliedForPatent";
 import Users from "./pages/Users/Users";
 import ApprovedBrokers from "./pages/Brokers/Approved/Approved";
 import UnApprovedBrokers from "./pages/Brokers/UnApproved/UnApproved";
+import UserDetails from "./components/UserDetails/UserDetails";
 
 function App() {
   useEffect(() => {
@@ -48,6 +49,10 @@ function App() {
         {
           path: ROUTES.users,
           element: <Users />,
+        },
+        {
+          path: `${ROUTES.users}/:id`,
+          element: <UserDetails />,
         },
         // {
         //   path: ROUTES.forgotPassword,

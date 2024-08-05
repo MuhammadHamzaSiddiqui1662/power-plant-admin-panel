@@ -14,7 +14,7 @@ export default function UnApprovedBrokers() {
   const data = useAppSelector((state) => state.user.unApprovedBrokers);
 
   const handleRowClick = (row: any) => {
-    navigate(`../${row.id}?${SEARCH_PARAMS.status}=${ROUTES.published}`);
+    navigate(`../${row.id}?${SEARCH_PARAMS.status}=${ROUTES.approved}`);
   };
 
   return (
