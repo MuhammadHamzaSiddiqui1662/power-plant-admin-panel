@@ -4,6 +4,7 @@ import { login } from "../../services/auth";
 import { Admin } from "../../types/user";
 
 export interface AuthState {
+  userType: string;
   admin: Admin;
   isLoading: boolean;
   isWaitingForOtp: boolean;
@@ -15,6 +16,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+  userType: "",
   admin: {} as Admin,
   isLoading: true,
   isWaitingForOtp: false,
