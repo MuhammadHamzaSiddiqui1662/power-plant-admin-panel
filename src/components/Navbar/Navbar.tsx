@@ -10,7 +10,7 @@ import {
 import { NavLink, useSearchParams } from "react-router-dom";
 import { ROUTES, SEARCH_PARAMS } from "../../config/constants";
 import DownloadingIcon from "@mui/icons-material/Downloading";
-import AutoModeIcon from "@mui/icons-material/AutoMode";
+// import AutoModeIcon from "@mui/icons-material/AutoMode";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import GridViewIcon from "@mui/icons-material/GridView";
 import LogoutIcon from "@mui/icons-material/Logout";

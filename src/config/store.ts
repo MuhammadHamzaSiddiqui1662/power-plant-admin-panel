@@ -11,6 +11,7 @@ export const store = configureStore({
     saleDeed: saleDeedSlice,
     ip: ipSlice,
   },
+  // @ts-ignore
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   devTools: true,
 });
