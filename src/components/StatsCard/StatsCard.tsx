@@ -11,6 +11,7 @@ export default function StatsCard({ variant, title, value, ...props }: Props) {
     <Box
       display={"flex"}
       flexDirection={"column"}
+      justifyContent={"space-between"}
       gap={8}
       p={3}
       borderRadius={2}
