@@ -1,7 +1,7 @@
 import { api } from "../config/axios";
 import { Admin } from "../types/user";
 
-const authRoute = "auth";
+const authRoute = "admin";
 
 export const login = async (email: string, password: string) => {
   const { data } = await api.post<any>(`/${authRoute}/login`, {
