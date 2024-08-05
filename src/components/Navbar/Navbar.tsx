@@ -48,7 +48,7 @@ export default function Navbar({ width }: { width?: number }) {
               </ListItemButton>
             </NavLink>
           </ListItem>
-          <ListSubheader>Cases</ListSubheader>
+          {/* <ListSubheader>Cases</ListSubheader>
           <ListItem>
             <NavLink
               to={`${ROUTES.cases}/${ROUTES.pending}`}
@@ -84,7 +84,7 @@ export default function Navbar({ width }: { width?: number }) {
                 <ListItemText>In Progress</ListItemText>
               </ListItemButton>
             </NavLink>
-          </ListItem>
+          </ListItem> */}
 
           <ListSubheader>Ips</ListSubheader>
           <ListItem>

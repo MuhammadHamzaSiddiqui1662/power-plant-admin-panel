@@ -3,8 +3,9 @@ import StatsCard from "../../components/StatsCard/StatsCard";
 import { useAppSelector } from "../../config/store";
 
 export default function Dashboard() {
-  const { cityCourt, inProgressSaleDeeds, pendingSaleDeeds, transferred } =
-    useAppSelector((state) => state.saleDeed);
+  const { activeIPs, archivedIPs, draftIPs, pendingIPs } = useAppSelector(
+    (state) => state.ip
+  );
 
   return (
     <Box p={4} display={"flex"} flexDirection={"column"} gap={3}>
@@ -12,23 +13,23 @@ export default function Dashboard() {
       <Box display={"grid"} gridTemplateColumns={"1fr 1fr"} gap={5}>
         <StatsCard
           variant="contained"
-          title="Pending"
-          value={pendingSaleDeeds.length.toString()}
+          title="Applied for patent"
+          value={pendingIPs.length.toString()}
         />
         <StatsCard
           variant="outlined"
-          title="In Progress"
-          value={inProgressSaleDeeds.length.toString()}
+          title="In Active"
+          value={archivedIPs.length.toString()}
         />
         <StatsCard
           variant="outlined"
-          title="City Court"
-          value={cityCourt.length.toString()}
+          title="Draft"
+          value={draftIPs.length.toString()}
         />
         <StatsCard
           variant="contained"
-          title="Transfered"
-          value={transferred.length.toString()}
+          title="Published"
+          value={activeIPs.length.toString()}
         />
       </Box>
     </Box>

@@ -5,12 +5,11 @@ import { IP_COLUMNS, ROUTES, SEARCH_PARAMS } from "../../../config/constants";
 import { useAppSelector } from "../../../config/store";
 import { IP } from "../../../types/ip";
 import { formatIPRows } from "../../../utils";
+import { IpStatus } from "../../../enums";
 
 export default function AppliedForPatentIPs() {
   const navigate = useNavigate();
-  const data = useAppSelector((state) =>
-    state.ip.ips.filter((ip) => ip.status === "AppliedForPatent")
-  );
+  const data = useAppSelector((state) => state.ip.pendingIPs);
 
   const handleRowClick = (row: IP) => {
     navigate(

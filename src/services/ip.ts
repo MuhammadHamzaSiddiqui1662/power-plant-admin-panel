@@ -1,9 +1,9 @@
 import { api } from "../config/axios";
 import { IP } from "../types/ip";
 
-const baseUrl = "/ips";
+const baseUrl = "/admin/ips";
 
-export const getIPs = async (): Promise<{ result: IP[] }> => {
+export const getIPs = async (): Promise<IP[]> => {
   const response = await api.get(baseUrl);
   return response.data;
 };

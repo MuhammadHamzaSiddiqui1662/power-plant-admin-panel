@@ -8,9 +8,7 @@ import { formatIPRows } from "../../../utils";
 
 export default function InactiveIPs() {
   const navigate = useNavigate();
-  const data = useAppSelector((state) =>
-    state.ip.ips.filter((ip) => ip.status === "InActive")
-  );
+  const data = useAppSelector((state) => state.ip.archivedIPs);
 
   const handleRowClick = (row: IP) => {
     navigate(`../${row._id}?${SEARCH_PARAMS.status}=${ROUTES.inactive}`);

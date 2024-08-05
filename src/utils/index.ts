@@ -12,7 +12,7 @@ export const formatRows = (saleDeeds: SaleDeed[]): Data[] =>
 
 export const formatIPRows = (ips: IP[]) => {
   return ips.map((ip) => ({
-    id: ip.id,
+    id: ip._id,
     name: ip.name,
     price: ip.price,
     status: ip.status,

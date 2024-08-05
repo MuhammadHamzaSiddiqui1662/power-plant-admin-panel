@@ -8,9 +8,7 @@ import { formatIPRows } from "../../../utils";
 
 export default function PublishedIPs() {
   const navigate = useNavigate();
-  const data = useAppSelector((state) =>
-    state.ip.ips.filter((ip) => ip.status === "Published")
-  );
+  const data = useAppSelector((state) => state.ip.activeIPs);
 
   const handleRowClick = (row: IP) => {
     navigate(`../${row._id}?${SEARCH_PARAMS.status}=${ROUTES.published}`);

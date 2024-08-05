@@ -8,9 +8,7 @@ import { formatIPRows } from "../../../utils";
 
 export default function DraftIPs() {
   const navigate = useNavigate();
-  const data = useAppSelector((state) =>
-    state.ip.ips.filter((ip) => ip.status === "Draft")
-  );
+  const data = useAppSelector((state) => state.ip.draftIPs);
 
   const handleRowClick = (row: IP) => {
     navigate(`../${row._id}?${SEARCH_PARAMS.status}=${ROUTES.draft}`);

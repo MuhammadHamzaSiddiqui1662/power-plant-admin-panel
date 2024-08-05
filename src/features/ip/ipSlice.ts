@@ -25,8 +25,8 @@ const initialState: IPState = {
 };
 
 export const getIPsThunk = createAsyncThunk("ip/get-all", async () => {
-  const { result } = await getIPs();
-  return result;
+  const ips = await getIPs();
+  return ips;
 });
 
 export const publishIpThunk = createAsyncThunk(
