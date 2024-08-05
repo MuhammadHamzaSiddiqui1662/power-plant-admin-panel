@@ -1,10 +1,9 @@
 import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Header from "./components/Header/Header";
 import { useEffect } from "react";
-import { useAppDispatch } from "./config/store";
-// import { getSaleDeedsThunk } from "./features/saleDeed/saleDeedSlice";
+import { useAppDispatch, useAppSelector } from "./config/store";
 import { getIPsThunk } from "./features/ip/ipSlice";
 import { getUsersThunk } from "./features/user/userSlice";
 
@@ -13,12 +12,14 @@ const navBarWidth = 240;
 
 export default function Body() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { accessToken } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    // dispatch(getSaleDeedsThunk());
+    if (!accessToken) return navigate("/sign-in");
     dispatch(getIPsThunk());
     dispatch(getUsersThunk());
-  }, []);
+  }, [accessToken]);
 
   return (
     <Box height={"100%"} display={"flex"}>

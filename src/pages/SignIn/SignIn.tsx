@@ -36,7 +36,7 @@ export default function SignIn() {
       return console.log("All feilds are required");
     const payload = formData;
     await dispatch(loginThunk(payload));
-    navigate(`../${ROUTES.verifyOtp}`);
+    navigate(`/${ROUTES.dashboard}`);
   };
 
   return (
