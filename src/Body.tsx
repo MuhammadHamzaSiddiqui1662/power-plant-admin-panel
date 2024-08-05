@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "./config/store";
 // import { getSaleDeedsThunk } from "./features/saleDeed/saleDeedSlice";
 import { getIPsThunk } from "./features/ip/ipSlice";
+import { getUsersThunk } from "./features/user/userSlice";
 
 const headerHeight = 64;
 const navBarWidth = 240;
@@ -16,6 +17,7 @@ export default function Body() {
   useEffect(() => {
     // dispatch(getSaleDeedsThunk());
     dispatch(getIPsThunk());
+    dispatch(getUsersThunk());
   }, []);
 
   return (

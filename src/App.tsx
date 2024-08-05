@@ -6,7 +6,7 @@ import Body from "./Body";
 // import InProgress from "./pages/Cases/InProgress/InProgress";
 // import SaleDeed from "./pages/Cases/SaleDeed/SaleDeed";
 import Published from "./pages/Ip/Published/published";
-import Profile from "./pages/Profile/Profile";
+// import Profile from "./pages/Profile/Profile";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import SignIn from "./pages/SignIn/SignIn";
 // import SignUp from "./pages/SignUp/SignUp";
@@ -15,6 +15,9 @@ import "./App.css";
 import InactiveIPs from "./pages/Ip/Inactive/inActive";
 import DraftIPs from "./pages/Ip/Draft/draft";
 import AppliedForPatentIPs from "./pages/Ip/AppliedForPatent/appliedForPatent";
+import Users from "./pages/Users/Users";
+import ApprovedBrokers from "./pages/Brokers/Approved/Approved";
+import UnApprovedBrokers from "./pages/Brokers/UnApproved/UnApproved";
 
 function App() {
   useEffect(() => {
@@ -43,13 +46,17 @@ function App() {
           element: <Dashboard />,
         },
         {
-          path: ROUTES.forgotPassword,
-          element: <></>,
+          path: ROUTES.users,
+          element: <Users />,
         },
-        {
-          path: ROUTES.profile,
-          element: <Profile />,
-        },
+        // {
+        //   path: ROUTES.forgotPassword,
+        //   element: <></>,
+        // },
+        // {
+        //   path: ROUTES.profile,
+        //   element: <Profile />,
+        // },
 
         // {
         //   path: ROUTES.cases,
@@ -69,6 +76,20 @@ function App() {
         //     },
         //   ],
         // },
+        {
+          path: ROUTES.brokers,
+          element: <Outlet />,
+          children: [
+            {
+              path: ROUTES.approved,
+              element: <ApprovedBrokers />,
+            },
+            {
+              path: ROUTES.unapproved,
+              element: <UnApprovedBrokers />,
+            },
+          ],
+        },
         {
           path: ROUTES.ip,
           element: <Outlet />,

@@ -4,12 +4,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
 // import saleDeedSlice from "../features/saleDeed/saleDeedSlice";
 import ipSlice from "../features/ip/ipSlice";
+import userSlice from "../features/user/userSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
     // saleDeed: saleDeedSlice,
     ip: ipSlice,
+    user: userSlice,
   },
   // @ts-ignore
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),

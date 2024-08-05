@@ -10,7 +10,7 @@ import {
 import { NavLink, useSearchParams } from "react-router-dom";
 import { ROUTES, SEARCH_PARAMS } from "../../config/constants";
 import DownloadingIcon from "@mui/icons-material/Downloading";
-// import AutoModeIcon from "@mui/icons-material/AutoMode";
+import AutoModeIcon from "@mui/icons-material/AutoMode";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import GridViewIcon from "@mui/icons-material/GridView";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -48,6 +48,45 @@ export default function Navbar({ width }: { width?: number }) {
               </ListItemButton>
             </NavLink>
           </ListItem>
+          <ListItem>
+            <NavLink to={ROUTES.users} className={"nav-link"}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <GridViewIcon />
+                </ListItemIcon>
+                <ListItemText>Users</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+
+          <ListSubheader>Brokers</ListSubheader>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.brokers}/${ROUTES.approved}`}
+              className={`nav-link`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <AutoModeIcon />
+                </ListItemIcon>
+                <ListItemText>Approved</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.brokers}/${ROUTES.unapproved}`}
+              className={`nav-link`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <DownloadingIcon />
+                </ListItemIcon>
+                <ListItemText>Un Approved</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+
           {/* <ListSubheader>Cases</ListSubheader>
           <ListItem>
             <NavLink

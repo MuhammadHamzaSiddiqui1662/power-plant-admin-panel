@@ -42,10 +42,20 @@ export const theme: ThemeOptions = createTheme({
         },
       },
     },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          paddingTop: 0,
+          paddingBottom: 8,
+        },
+      },
+    },
     MuiListItemButton: {
       styleOverrides: {
         root: {
           borderRadius: "inherit",
+          paddingTop: 4,
+          paddingBottom: 4,
         },
       },
     },
@@ -53,6 +63,7 @@ export const theme: ThemeOptions = createTheme({
       styleOverrides: {
         root: {
           color: "inherit",
+          minWidth: 40,
         },
       },
     },

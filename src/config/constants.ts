@@ -2,6 +2,7 @@ import { Column } from "../types/saleDeed";
 
 export const ROUTES = {
   dashboard: "",
+  users: "users",
   signUp: "sign-up",
   signIn: "sign-in",
   forgotPassword: "forgot-password",
@@ -11,6 +12,9 @@ export const ROUTES = {
   inProgress: "in-progress",
   saleDeed: ":saleDeedId",
   profile: "profile",
+  brokers: "brokers",
+  approved: "approved",
+  unapproved: "unapproved",
   ip: "ip",
   published: "published",
   inactive: "inactive",
@@ -68,4 +72,35 @@ export const IP_COLUMNS = [
     format: (value: number) => `$${value.toFixed(2)}`,
   },
   { id: "status", label: "Status", minWidth: 100 },
+];
+
+export const USERS_COLUMNS = [
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 100,
+  },
+  { id: "name", label: "Name", minWidth: 100 },
+  {
+    id: "email",
+    label: "Email",
+    minWidth: 100,
+  },
+  { id: "status", label: "Status", minWidth: 100 },
+];
+
+export const BROKERS_COLUMNS = [
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 100,
+  },
+  { id: "name", label: "Name", minWidth: 100 },
+  {
+    id: "email",
+    label: "Email",
+    minWidth: 100,
+  },
+  { id: "status", label: "Status", minWidth: 100 },
+  { id: "brokerStatus", label: "Broker Status", minWidth: 100 },
 ];
