@@ -1,13 +1,4 @@
 import { useEffect, useState } from "react";
-import {
-  Chip,
-  Grid,
-  CircularProgress,
-  Typography,
-  Box,
-  Button,
-  styled,
-} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RootState } from "../../config/store";
@@ -16,45 +7,11 @@ import {
   approveBrokerThunk,
 } from "../../features/user/userSlice";
 import { AppDispatch } from "../../config/store";
-import { UserStatus } from "../../types/user";
-
-const Container = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: theme.palette.background.default,
-}));
-
-const ProfileImage = styled("img")({
-  width: "100%",
-  borderRadius: "8px",
-  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-});
-
-const UserName = styled(Typography)(({ theme }) => ({
-  color: theme.palette.primary.main,
-  fontSize: "2rem",
-  fontWeight: "500",
-}));
-
-const UserInterests = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  display: "flex",
-  flexWrap: "wrap",
-  gap: theme.spacing(1),
-}));
-
-const CustomChip = styled(Chip)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.light,
-  color: theme.palette.primary.contrastText,
-}));
-
-const ApproveButton = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  backgroundColor: theme.palette.success.main,
-  color: theme.palette.success.contrastText,
-  "&:hover": {
-    backgroundColor: theme.palette.success.dark,
-  },
-}));
+import Card from "../Card/card";
+import CircularProgress from "@mui/material/CircularProgress";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { User, UserStatus } from "../../types/user";
 
 export default function UserDetails() {
   const dispatch = useDispatch<AppDispatch>();
@@ -66,7 +23,7 @@ export default function UserDetails() {
     (state: RootState) => state.user
   );
 
-  const user = users.find((user) => user._id === userId);
+  const user = users.find((user: User) => user._id === userId);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -80,7 +37,7 @@ export default function UserDetails() {
 
   const handleApprove = () => {
     if (user) {
-      dispatch(approveBrokerThunk({ id: user._id, status: "Active" }));
+      dispatch(approveBrokerThunk({ id: user._id, status: UserStatus.Active }));
     }
   };
 
@@ -110,52 +67,21 @@ export default function UserDetails() {
   })();
 
   return (
-    <Container>
+    <Box padding={3} bgcolor="background.default">
       <Typography variant="h4" align="center" gutterBottom>
         {userProfileType} Profile
       </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <ProfileImage
-            src="https://fastly.picsum.photos/id/413/200/200.jpg?hmac=e6w034LWyRaayerJY_efJywx28FwPjv-EC8F10jVtMQ"
-            alt="Profile"
-          />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Typography variant="h5" component="h1">
-            <UserName>{user.name}</UserName>
-          </Typography>
-          <Typography variant="body1" color="textSecondary">
-            {user.interests && user.interests.length > 0
-              ? user.interests[0]
-              : "No Interests"}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" paragraph>
-            {user.about || "No details available"}
-          </Typography>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Interests
-          </Typography>
-          <UserInterests>
-            {user.interests && user.interests.length > 0 ? (
-              user.interests.map((element, i) => (
-                <CustomChip key={i} label={element} />
-              ))
-            ) : (
-              <Typography>No Interests</Typography>
-            )}
-          </UserInterests>
-          {user.brokerStatus === UserStatus.Pending && (
-            <ApproveButton
-              variant="contained"
-              onClick={handleApprove}
-              disabled={approvingId === user._id}
-            >
-              Approve
-            </ApproveButton>
-          )}
-        </Grid>
-      </Grid>
-    </Container>
+      <Card
+        name={user.name}
+        description={user.about || "No details available"}
+        year={user.createdAt || new Date()}
+        categories={user.interests}
+        profileImage={user.imageUrl}
+        brokerStatus={user.brokerStatus}
+        userType={userProfileType}
+        handleApprove={handleApprove}
+        isApproving={approvingId === user._id}
+      />
+    </Box>
   );
 }
