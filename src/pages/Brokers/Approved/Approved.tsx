@@ -15,7 +15,7 @@ export default function ApprovedBrokers() {
 
   const handleRowClick = (row: any) => {
     navigate(
-      `${ROUTES.users}/${row.id}?${SEARCH_PARAMS.status}=${ROUTES.approved}`
+      `/${ROUTES.users}/${row.id}?${SEARCH_PARAMS.status}=${ROUTES.approved}`
     );
   };
 
