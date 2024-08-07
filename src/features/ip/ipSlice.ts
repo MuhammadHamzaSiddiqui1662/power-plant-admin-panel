@@ -45,6 +45,14 @@ export const updateIPDetailsThunk = createAsyncThunk(
   }
 );
 
+export const getUserPublishedIps = createAsyncThunk(
+  "ip/get-published",
+  async (userId: string) => {
+    const data = await getIPs(`?userId=${userId}&status=Published`);
+    return data;
+  }
+);
+
 export const ipSlice = createSlice({
   name: "ip",
   initialState,

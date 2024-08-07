@@ -3,8 +3,8 @@ import { IP } from "../types/ip";
 
 const baseUrl = "/admin/ips";
 
-export const getIPs = async (): Promise<IP[]> => {
-  const response = await api.get(baseUrl);
+export const getIPs = async (filterQuery?: string): Promise<IP[]> => {
+  const response = await api.get(`${baseUrl}${filterQuery || ""}`);
   return response.data;
 };
 
