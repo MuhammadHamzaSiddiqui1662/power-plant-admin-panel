@@ -64,6 +64,11 @@ export const COLUMNS: Column[] = [
 ];
 
 export const IP_COLUMNS = [
+  {
+    id: "id",
+    label: "ID",
+    minWidth: 100,
+  },
   { id: "name", label: "Name", minWidth: 170 },
   {
     id: "price",

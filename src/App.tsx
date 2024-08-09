@@ -19,6 +19,7 @@ import Users from "./pages/Users/Users";
 import ApprovedBrokers from "./pages/Brokers/Approved/Approved";
 import UnApprovedBrokers from "./pages/Brokers/UnApproved/UnApproved";
 import UserDetails from "./components/UserDetails/UserDetails";
+import IpDetailsPage from "./components/IpDetails/IpDetails";
 
 function App() {
   useEffect(() => {
@@ -53,6 +54,10 @@ function App() {
         {
           path: `${ROUTES.users}/:id`,
           element: <UserDetails />,
+        },
+        {
+          path: `${ROUTES.ip}/:id`,
+          element: <IpDetailsPage />,
         },
         // {
         //   path: ROUTES.forgotPassword,

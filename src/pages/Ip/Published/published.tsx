@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import StickyHeadTable from "../../../components/Table/StickyHeadTable";
 import { useNavigate } from "react-router-dom";
-import { IP_COLUMNS, ROUTES, SEARCH_PARAMS } from "../../../config/constants";
+import { IP_COLUMNS, ROUTES } from "../../../config/constants";
 import { useAppSelector } from "../../../config/store";
 import { IP } from "../../../types/ip";
 import { formatIPRows } from "../../../utils";
@@ -11,7 +11,7 @@ export default function PublishedIPs() {
   const data = useAppSelector((state) => state.ip.activeIPs);
 
   const handleRowClick = (row: IP) => {
-    navigate(`../${row._id}?${SEARCH_PARAMS.status}=${ROUTES.published}`);
+    navigate(`/${ROUTES.ip}/${row.id}`);
   };
 
   return (
