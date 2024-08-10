@@ -45,10 +45,10 @@ export const updateIPDetailsThunk = createAsyncThunk(
   }
 );
 
-export const getUserPublishedIps = createAsyncThunk(
-  "ip/get-published",
+export const getUserPersonalIps = createAsyncThunk(
+  "ip/get-user-ips",
   async (userId: string) => {
-    const data = await getIPs(`?userId=${userId}&status=Published`);
+    const data = await getIPs(`?userId=${userId}`);
     return data;
   }
 );

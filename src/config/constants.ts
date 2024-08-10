@@ -104,3 +104,13 @@ export const BROKERS_COLUMNS = [
   { id: "status", label: "Status", minWidth: 100 },
   { id: "brokerStatus", label: "Broker Status", minWidth: 100 },
 ];
+
+export const HIRINGS_COLUMNS = [
+  { id: "name", label: "Name", minWidth: 100 },
+  {
+    id: "email",
+    label: "Email",
+    minWidth: 100,
+  },
+  { id: "ip", label: "IP", minWidth: 100 },
+];

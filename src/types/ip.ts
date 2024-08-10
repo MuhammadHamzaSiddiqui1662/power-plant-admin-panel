@@ -1,4 +1,3 @@
-import { Dayjs } from "dayjs";
 import { IpStatus } from "../enums";
 
 export interface IPSection {
@@ -19,7 +18,7 @@ export interface IP {
   price: number;
   status: IpStatus;
   categories: string[];
-  publishedDate: Dayjs;
+  publishedDate: Date;
   patentNumber?: string;
   trademark?: string;
   copyright?: string;

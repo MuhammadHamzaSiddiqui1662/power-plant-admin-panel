@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { User, UserStatus } from "../../types/user";
-import { getUsers, updateBrokerStatus } from "../../services/user";
+import {
+  getUserHirings,
+  getUsers,
+  updateBrokerStatus,
+} from "../../services/user";
 
 export interface UserState {
   users: User[];
@@ -44,6 +48,18 @@ export const approveBrokerThunk = createAsyncThunk<
       const updatedUser = await updateBrokerStatus(id, status);
       dispatch(getUsersThunk());
       return updatedUser;
+    } catch (error) {
+      return rejectWithValue("Failed to approve broker");
+    }
+  }
+);
+
+export const getUserHiringsThunk = createAsyncThunk(
+  "user/user's-brokers",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const hirings = await getUserHirings(id);
+      return hirings;
     } catch (error) {
       return rejectWithValue("Failed to approve broker");
     }
