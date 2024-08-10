@@ -27,6 +27,7 @@ export default function Navbar({ width }: { width?: number }) {
       height={"100%"}
       borderRight={1}
       borderColor={"#ccc"}
+      overflow={"auto"}
     >
       <Box
         p={2}
