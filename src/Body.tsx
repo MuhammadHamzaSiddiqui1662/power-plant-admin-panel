@@ -24,7 +24,11 @@ export default function Body() {
   return (
     <Box height={"100%"} display={"flex"}>
       <Navbar width={navBarWidth} />
-      <Box display={"flex"} flexDirection={"column"} width={"100%"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        width={`calc(100% - ${navBarWidth}px)`}
+      >
         <Header height={headerHeight} />
         <Box
           height={"100%"}
