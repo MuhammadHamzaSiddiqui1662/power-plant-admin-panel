@@ -9,6 +9,7 @@ import {
   getUserHiringsThunk,
 } from "../../features/user/userSlice";
 import { Hiring } from "../../types/hiring";
+import { toast } from "react-toastify";
 
 interface CardProps {
   user: User;
@@ -24,9 +25,16 @@ const BrokerProfileCard: React.FC<CardProps> = ({ user }) => {
   const isApproving =
     useAppSelector((state) => state.user.approvingId) === user._id;
 
-  const handleApprove = () => {
+  const handleApprove = async () => {
     if (user) {
-      dispatch(approveBrokerThunk({ id: user._id, status: UserStatus.Active }));
+      try {
+        await dispatch(
+          approveBrokerThunk({ id: user._id, status: UserStatus.Active })
+        ).unwrap();
+        toast.success("Broker approved successfully!");
+      } catch (error) {
+        toast.error("Failed to approve broker. Please try again.");
+      }
     }
   };
 
@@ -35,11 +43,9 @@ const BrokerProfileCard: React.FC<CardProps> = ({ user }) => {
       const { payload: hirings } = await dispatch(
         getUserHiringsThunk(user._id)
       );
-      console.log("hirings", hirings);
       setHirings(hirings as Hiring[]);
     })();
-  }, [dispatch]);
-  console.log(hirings);
+  }, [dispatch, user._id]);
 
   const Certificate = styled("img")({
     width: 160,

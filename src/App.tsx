@@ -20,6 +20,7 @@ import ApprovedBrokers from "./pages/Brokers/Approved/Approved";
 import UnApprovedBrokers from "./pages/Brokers/UnApproved/UnApproved";
 import UserDetails from "./components/UserDetails/UserDetails";
 import IpDetailsPage from "./components/IpDetails/IpDetails";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   useEffect(() => {
