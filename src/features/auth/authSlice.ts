@@ -2,6 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { login } from "../../services/auth";
 import { Admin } from "../../types/user";
+import { RootState } from "../../config/store";
+import { BACKEND_URL } from "../../config/constants";
+import axios from "axios";
 
 export interface AuthState {
   userType: string;
@@ -32,6 +35,26 @@ export const loginThunk = createAsyncThunk(
   async ({ email, password }: { email: string; password: string }) => {
     const result = await login(email, password);
     return result;
+  }
+);
+
+export const refreshTokenThunk = createAsyncThunk(
+  "auth/refresh-token",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState() as RootState;
+      const { data, status } = await axios.post(
+        `${BACKEND_URL}/auth/refresh-token`,
+        {
+          refreshToken: auth.refreshToken,
+        }
+      );
+      console.log(data, status);
+      return { data, status };
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error);
+    }
   }
 );
 
@@ -69,10 +92,14 @@ export const loginThunk = createAsyncThunk(
 
 export const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: { ...initialState },
   reducers: {
     setUser: (state, action: PayloadAction<Admin>) => {
       state.admin = action.payload;
+    },
+    logout: (state) => {
+      state = initialState;
+      state.admin = initialState.admin;
     },
   },
   extraReducers: (builder) => {
@@ -127,6 +154,6 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser } = authSlice.actions;
+export const { setUser, logout } = authSlice.actions;
 
 export default authSlice.reducer;

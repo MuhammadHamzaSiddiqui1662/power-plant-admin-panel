@@ -1,10 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getIPsThunk } from "../../features/ip/ipSlice";
+import { getIPsThunk, patentIpThunk } from "../../features/ip/ipSlice";
 import { RootState, AppDispatch } from "../../config/store";
-import { Container, Grid, styled, Rating, Typography } from "@mui/material";
+import {
+  Grid,
+  styled,
+  Rating,
+  Typography,
+  Box,
+  TextField,
+} from "@mui/material";
 import { IP } from "../../types/ip";
+import { IpStatus } from "../../enums";
 
 const ProfileImage = styled("img")({
   width: "100%",
@@ -104,20 +118,55 @@ const SectionContainer = styled(CardContainer)({
 });
 
 const IpDetailsPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const [selectedIp, setSelectedIp] = useState<IP | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const { ips, isLoading, error } = useSelector((state: RootState) => state.ip);
+  const selectedIp = useMemo(() => ips.find((ip) => ip._id === id), [ips, id]);
+  const [patentDetails, setPatentDetails] = useState({
+    patentNumber: "",
+    publishedDate: ((date: Date) =>
+      `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`)(
+      new Date()
+    ),
+  });
+  console.log("patentDetails", patentDetails);
+
+  const handlePatentSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (selectedIp) {
+      const formData = new FormData();
+      const payload: IP = {
+        ...selectedIp,
+        patentNumber: patentDetails.patentNumber,
+        publishedDate: new Date(patentDetails.publishedDate),
+        status: IpStatus.InActive,
+      };
+      console.log(payload);
+      formData.append("data", JSON.stringify(payload));
+      const {
+        // @ts-ignore
+        payload: { status },
+      } = await dispatch(patentIpThunk(formData));
+      if (status !== 200) return console.log("error", "Error patenting ip!");
+      dispatch(getIPsThunk());
+    }
+  };
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setPatentDetails((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+    console.log(typeof e.target.value, e.target.value);
+  };
 
   useEffect(() => {
     dispatch(getIPsThunk());
   }, [dispatch]);
-
-  const { ips, isLoading, error } = useSelector((state: RootState) => state.ip);
-
-  useEffect(() => {
-    const ip = ips.find((ip) => ip._id === id);
-    setSelectedIp(ip || null);
-  }, [ips, id]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -132,12 +181,15 @@ const IpDetailsPage: React.FC = () => {
   }
 
   return (
-    <Container>
-      <Grid container spacing={4}>
+    <Box sx={{ p: 3 }}>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <Typography variant="h4">IP Details</Typography>
+        </Grid>
         <Grid item xs={12}>
           <CardContainer>
             <CardContent>
-              <div className="relative">
+              <div className="relative" style={{ marginBottom: 16 }}>
                 <ProfileImage
                   src="https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s"
                   alt="Profile"
@@ -167,7 +219,43 @@ const IpDetailsPage: React.FC = () => {
                   <Rating value={4.5} precision={0.5} readOnly />
                 </ListItem>
               </List>
-              <ApproveButton>Patent</ApproveButton>
+              {selectedIp &&
+                selectedIp.status === IpStatus.AppliedForPatent && (
+                  <Grid
+                    container
+                    component={"form"}
+                    maxWidth={600}
+                    spacing={2}
+                    onSubmit={handlePatentSubmit}
+                  >
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Patent Number"
+                        name="patentNumber"
+                        variant="filled"
+                        size="small"
+                        fullWidth
+                        value={patentDetails.patentNumber}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Published date"
+                        name="publishedDate"
+                        variant="filled"
+                        size="small"
+                        type="date"
+                        fullWidth
+                        value={patentDetails.publishedDate}
+                        onChange={handleChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <ApproveButton type="submit">Patent</ApproveButton>
+                    </Grid>
+                  </Grid>
+                )}
             </CardContent>
           </CardContainer>
         </Grid>
@@ -222,7 +310,7 @@ const IpDetailsPage: React.FC = () => {
           </SectionContainer>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

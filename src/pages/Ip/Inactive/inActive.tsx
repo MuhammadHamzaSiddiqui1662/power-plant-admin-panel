@@ -11,7 +11,7 @@ export default function InactiveIPs() {
   const data = useAppSelector((state) => state.ip.archivedIPs);
 
   const handleRowClick = (row: IP) => {
-    navigate(`/${ROUTES.ip}/${row.id}`);
+    navigate(`/${ROUTES.ip}/${row._id}`);
   };
 
   return (

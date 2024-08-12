@@ -1,5 +1,10 @@
 import { Column } from "../types/saleDeed";
 
+export const BACKEND_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://power-plant-2a6a23ab8691.herokuapp.com/api/v1"
+    : "http://localhost:3001/api/v1";
+
 export const ROUTES = {
   dashboard: "",
   users: "users",
@@ -65,7 +70,7 @@ export const COLUMNS: Column[] = [
 
 export const IP_COLUMNS = [
   {
-    id: "id",
+    id: "_id",
     label: "ID",
     minWidth: 100,
   },

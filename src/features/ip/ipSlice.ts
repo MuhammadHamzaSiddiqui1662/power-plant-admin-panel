@@ -3,6 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { getIPs, publishIp, updateIP } from "../../services/ip";
 import { IP } from "../../types/ip";
 import { IpStatus } from "../../enums";
+import { api } from "../../config/axios";
 
 export interface IPState {
   ips: IP[];
@@ -49,6 +50,15 @@ export const getUserPersonalIps = createAsyncThunk(
   "ip/get-user-ips",
   async (userId: string) => {
     const data = await getIPs(`?userId=${userId}`);
+    return data;
+  }
+);
+
+export const patentIpThunk = createAsyncThunk(
+  "ip/get-user-ips",
+  async (ip: any) => {
+    const data = await api.put(`/ips`, ip);
+    console.log(data);
     return data;
   }
 );

@@ -11,7 +11,7 @@ export default function AppliedForPatentIPs() {
   const data = useAppSelector((state) => state.ip.pendingIPs);
 
   const handleRowClick = (row: IP) => {
-    navigate(`/${ROUTES.ip}/${row.id}`);
+    navigate(`/${ROUTES.ip}/${row._id}`);
   };
 
   return (

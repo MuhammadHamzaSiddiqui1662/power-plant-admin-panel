@@ -1,10 +1,8 @@
 import axios from "axios";
+import { BACKEND_URL } from "./constants";
 
 export const api = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://power-plant-2a6a23ab8691.herokuapp.com/api/v1"
-      : "http://localhost:3001/api/v1",
+  baseURL: BACKEND_URL,
   headers: {
     common: {
       Authorization: `Bearer ${
@@ -15,3 +13,20 @@ export const api = axios.create({
     },
   },
 });
+
+// Add a request interceptor
+api.interceptors.request.use(
+  (config) => {
+    const accessToken = JSON.parse(
+      localStorage.getItem("persist:auth")!
+    ).accessToken.split('"')[1];
+    if (accessToken) {
+      console.log("accessToken", accessToken);
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);

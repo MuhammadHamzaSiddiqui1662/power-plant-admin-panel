@@ -44,7 +44,7 @@ export default function UserDetails() {
 
   return (
     <Stack padding={3} bgcolor="background.default" gap={2}>
-      <Typography variant="h4" align="center" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         User Profile
       </Typography>
       <GeneralProfileCard user={user} />

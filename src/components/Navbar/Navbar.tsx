@@ -11,12 +11,14 @@ import { NavLink, useSearchParams } from "react-router-dom";
 import { ROUTES, SEARCH_PARAMS } from "../../config/constants";
 import DownloadingIcon from "@mui/icons-material/Downloading";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import GridViewIcon from "@mui/icons-material/GridView";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useAppDispatch } from "../../config/store";
+import { logout } from "../../features/auth/authSlice";
 
 export default function Navbar({ width }: { width?: number }) {
   let [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
 
   return (
     <Box
@@ -202,7 +204,7 @@ export default function Navbar({ width }: { width?: number }) {
           </ListItem>
 
           <ListSubheader>Auth</ListSubheader>
-          <ListItem>
+          {/* <ListItem>
             <NavLink to={ROUTES.profile} className={"nav-link"}>
               <ListItemButton>
                 <ListItemIcon>
@@ -211,9 +213,13 @@ export default function Navbar({ width }: { width?: number }) {
                 <ListItemText>Profile</ListItemText>
               </ListItemButton>
             </NavLink>
-          </ListItem>
+          </ListItem> */}
           <ListItem>
-            <NavLink to={ROUTES.signIn} className={"nav-link"}>
+            <NavLink
+              to={ROUTES.signIn}
+              className={"nav-link"}
+              onClick={() => dispatch(logout())}
+            >
               <ListItemButton>
                 <ListItemIcon>
                   <LogoutIcon />
