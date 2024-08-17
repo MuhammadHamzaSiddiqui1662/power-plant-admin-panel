@@ -9,14 +9,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getIPsThunk, patentIpThunk } from "../../features/ip/ipSlice";
 import { RootState, AppDispatch } from "../../config/store";
-import {
-  Grid,
-  styled,
-  Rating,
-  Typography,
-  Box,
-  TextField,
-} from "@mui/material";
+import { Grid, styled, Typography, Box, TextField } from "@mui/material";
 import { IP } from "../../types/ip";
 import { IpStatus } from "../../enums";
 
@@ -219,10 +212,6 @@ const IpDetailsPage: React.FC = () => {
                   <Label>Price</Label>
                   <Value>${selectedIp.price}</Value>
                 </ListItem>
-                {/* <ListItem>
-                  <Label>Rating</Label>
-                  <Rating value={4.5} precision={0.5} readOnly />
-                </ListItem> */}
                 <ListItem>
                   <Label>Status</Label>
                   <Value>{selectedIp.status}</Value>
