@@ -3,12 +3,9 @@ import StatsCard from "../../components/StatsCard/StatsCard";
 import { useAppSelector } from "../../config/store";
 
 export default function Dashboard() {
-  // const { activeIPs, archivedIPs, draftIPs, pendingIPs } = useAppSelector(
-  //   (state) => state.ip
-  // );
   const {
     user: { users, approvedBrokers, unApprovedBrokers },
-    ip: { ips, pendingIPs, activeIPs },
+    ip: { ips, appliedForPatentIPs, publishedIPs },
   } = useAppSelector((state) => state);
 
   return (
@@ -33,12 +30,12 @@ export default function Dashboard() {
         <StatsCard
           variant="outlined"
           title="Applied for patent"
-          value={pendingIPs.length.toString()}
+          value={appliedForPatentIPs.length.toString()}
         />
         <StatsCard
           variant="outlined"
           title="Published"
-          value={activeIPs.length.toString()}
+          value={publishedIPs.length.toString()}
         />
         <StatsCard
           variant="contained"

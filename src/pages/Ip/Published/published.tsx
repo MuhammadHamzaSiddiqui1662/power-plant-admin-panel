@@ -8,7 +8,7 @@ import { formatIPRows } from "../../../utils";
 
 export default function PublishedIPs() {
   const navigate = useNavigate();
-  const data = useAppSelector((state) => state.ip.activeIPs);
+  const data = useAppSelector((state) => state.ip.publishedIPs);
 
   const handleRowClick = (row: IP) => {
     navigate(`/${ROUTES.ip}/${row._id}`);

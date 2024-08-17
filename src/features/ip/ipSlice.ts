@@ -7,9 +7,9 @@ import { api } from "../../config/axios";
 
 export interface IPState {
   ips: IP[];
-  activeIPs: IP[];
-  pendingIPs: IP[];
-  archivedIPs: IP[];
+  publishedIPs: IP[];
+  appliedForPatentIPs: IP[];
+  inActiveIPs: IP[];
   draftIPs: IP[];
   isLoading: boolean;
   error: string;
@@ -17,9 +17,9 @@ export interface IPState {
 
 const initialState: IPState = {
   ips: [],
-  activeIPs: [],
-  pendingIPs: [],
-  archivedIPs: [],
+  publishedIPs: [],
+  appliedForPatentIPs: [],
+  inActiveIPs: [],
   draftIPs: [],
   isLoading: false,
   error: "",
@@ -77,13 +77,13 @@ export const ipSlice = createSlice({
       (state, action: PayloadAction<IP[]>) => {
         console.log("Data received in Redux:", action.payload); // Debugging
         state.ips = action.payload;
-        state.activeIPs = action.payload.filter(
+        state.publishedIPs = action.payload.filter(
           (ip) => ip.status === IpStatus.Published
         );
-        state.pendingIPs = action.payload.filter(
+        state.appliedForPatentIPs = action.payload.filter(
           (ip) => ip.status === IpStatus.AppliedForPatent
         );
-        state.archivedIPs = action.payload.filter(
+        state.inActiveIPs = action.payload.filter(
           (ip) => ip.status === IpStatus.InActive
         );
         state.draftIPs = action.payload.filter(
