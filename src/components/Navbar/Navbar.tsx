@@ -167,10 +167,10 @@ export default function Navbar({ width }: { width?: number }) {
           </ListItem>
           <ListItem>
             <NavLink
-              to={`${ROUTES.ip}/${ROUTES.draft}`}
+              to={`${ROUTES.ip}/${ROUTES.pending}`}
               className={`nav-link${
                 searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) === ROUTES.draft
+                searchParams.get(SEARCH_PARAMS.status) === ROUTES.pending
                   ? " active"
                   : ""
               }`}
@@ -179,7 +179,7 @@ export default function Navbar({ width }: { width?: number }) {
                 <ListItemIcon>
                   <DownloadingIcon />
                 </ListItemIcon>
-                <ListItemText>Draft</ListItemText>
+                <ListItemText>Pending</ListItemText>
               </ListItemButton>
             </NavLink>
           </ListItem>

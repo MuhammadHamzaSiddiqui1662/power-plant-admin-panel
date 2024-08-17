@@ -12,10 +12,6 @@ export const ROUTES = {
   signIn: "sign-in",
   forgotPassword: "forgot-password",
   verifyOtp: "verify-otp",
-  cases: "cases",
-  pending: "pending",
-  inProgress: "in-progress",
-  saleDeed: ":saleDeedId",
   profile: "profile",
   brokers: "brokers",
   approved: "approved",
@@ -25,6 +21,7 @@ export const ROUTES = {
   inactive: "inactive",
   draft: "draft",
   appliedForPatent: "appliedForPatent",
+  pending: "pending",
 };
 
 export const SEARCH_PARAMS = {

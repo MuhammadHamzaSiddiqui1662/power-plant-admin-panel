@@ -21,6 +21,7 @@ import UnApprovedBrokers from "./pages/Brokers/UnApproved/UnApproved";
 import UserDetails from "./components/UserDetails/UserDetails";
 import IpDetailsPage from "./components/IpDetails/IpDetails";
 import "react-toastify/dist/ReactToastify.css";
+import PendingIPs from "./pages/Ip/Pending/pending";
 
 function App() {
   useEffect(() => {
@@ -120,6 +121,10 @@ function App() {
             {
               path: ROUTES.appliedForPatent,
               element: <AppliedForPatentIPs />,
+            },
+            {
+              path: ROUTES.pending,
+              element: <PendingIPs />,
             },
           ],
         },

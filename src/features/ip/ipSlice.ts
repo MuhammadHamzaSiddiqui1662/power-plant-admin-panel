@@ -11,6 +11,7 @@ export interface IPState {
   appliedForPatentIPs: IP[];
   inActiveIPs: IP[];
   draftIPs: IP[];
+  pendingIPs: IP[];
   isLoading: boolean;
   error: string;
 }
@@ -21,6 +22,7 @@ const initialState: IPState = {
   appliedForPatentIPs: [],
   inActiveIPs: [],
   draftIPs: [],
+  pendingIPs: [],
   isLoading: false,
   error: "",
 };
@@ -88,6 +90,9 @@ export const ipSlice = createSlice({
         );
         state.draftIPs = action.payload.filter(
           (ip) => ip.status === IpStatus.Draft
+        );
+        state.pendingIPs = action.payload.filter(
+          (ip) => ip.status === IpStatus.Pending
         );
         state.isLoading = false;
       }
