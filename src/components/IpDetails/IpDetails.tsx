@@ -133,16 +133,21 @@ const IpDetailsPage: React.FC = () => {
   });
   console.log("patentDetails", patentDetails);
 
-  const handlePatentSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedIp) {
       const formData = new FormData();
-      const payload: IP = {
-        ...selectedIp,
-        patentNumber: patentDetails.patentNumber,
-        publishedDate: new Date(patentDetails.publishedDate),
-        status: IpStatus.InActive,
-      };
+      const payload: IP =
+        selectedIp.status === IpStatus.AppliedForPatent
+          ? {
+              ...selectedIp,
+              patentNumber: patentDetails.patentNumber,
+              publishedDate: new Date(patentDetails.publishedDate),
+              status: IpStatus.InActive,
+            }
+          : selectedIp.status === IpStatus.Published
+          ? { ...selectedIp, status: IpStatus.Pending }
+          : { ...selectedIp, status: IpStatus.Published };
       console.log(payload);
       formData.append("data", JSON.stringify(payload));
       const {
@@ -186,7 +191,7 @@ const IpDetailsPage: React.FC = () => {
         <Grid item xs={12}>
           <Typography variant="h4">IP Details</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} component={"form"} onSubmit={handleSubmit}>
           <CardContainer>
             <CardContent>
               <div className="relative" style={{ marginBottom: 16 }}>
@@ -214,20 +219,18 @@ const IpDetailsPage: React.FC = () => {
                   <Label>Price</Label>
                   <Value>${selectedIp.price}</Value>
                 </ListItem>
-                <ListItem>
+                {/* <ListItem>
                   <Label>Rating</Label>
                   <Rating value={4.5} precision={0.5} readOnly />
+                </ListItem> */}
+                <ListItem>
+                  <Label>Status</Label>
+                  <Value>{selectedIp.status}</Value>
                 </ListItem>
               </List>
               {selectedIp &&
                 selectedIp.status === IpStatus.AppliedForPatent && (
-                  <Grid
-                    container
-                    component={"form"}
-                    maxWidth={600}
-                    spacing={2}
-                    onSubmit={handlePatentSubmit}
-                  >
+                  <Grid container maxWidth={600} spacing={2}>
                     <Grid item xs={12} md={6}>
                       <TextField
                         label="Patent Number"
@@ -256,6 +259,15 @@ const IpDetailsPage: React.FC = () => {
                     </Grid>
                   </Grid>
                 )}
+              {selectedIp.status === IpStatus.InActive && (
+                <ApproveButton type="submit">Publish</ApproveButton>
+              )}
+              {selectedIp.status === IpStatus.Pending && (
+                <ApproveButton type="submit">Approve</ApproveButton>
+              )}
+              {selectedIp.status === IpStatus.Published && (
+                <ApproveButton type="submit">Suspend</ApproveButton>
+              )}
             </CardContent>
           </CardContainer>
         </Grid>
