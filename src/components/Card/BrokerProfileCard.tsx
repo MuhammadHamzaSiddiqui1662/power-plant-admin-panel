@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { User, UserStatus } from "../../types/user";
 import { Rating, Stack, styled, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../config/store";
+import { useAppDispatch } from "../../config/store";
 import { calculateRating } from "../../utils";
 import ReviewCard from "./ReviewCard";
 import {
-  approveBrokerThunk,
+  updateBrokerThunk,
   getUserHiringsThunk,
 } from "../../features/user/userSlice";
 import { Hiring } from "../../types/hiring";
@@ -22,14 +22,18 @@ const BrokerProfileCard: React.FC<CardProps> = ({ user }) => {
     () => calculateRating(user.reviewsAsBorker!) || 0,
     []
   );
-  const isApproving =
-    useAppSelector((state) => state.user.approvingId) === user._id;
 
   const handleApprove = async () => {
     if (user) {
       try {
         await dispatch(
-          approveBrokerThunk({ id: user._id, status: UserStatus.Active })
+          updateBrokerThunk({
+            id: user._id,
+            status:
+              user.brokerStatus === UserStatus.Active
+                ? UserStatus.Suspended
+                : UserStatus.Active,
+          })
         ).unwrap();
         toast.success("Broker approved successfully!");
       } catch (error) {
@@ -174,13 +178,13 @@ const BrokerProfileCard: React.FC<CardProps> = ({ user }) => {
               )}
             </Value>
           </ListItem>
-          {user.brokerStatus === UserStatus.Pending && (
-            <ListItem>
-              <ApproveButton onClick={handleApprove} disabled={isApproving}>
-                {isApproving ? "Approving..." : "Approve Broker"}
-              </ApproveButton>
-            </ListItem>
-          )}
+          <ListItem>
+            <ApproveButton onClick={handleApprove}>
+              {user.brokerStatus === UserStatus.Active
+                ? "Suspend Broker"
+                : "Approve Broker"}
+            </ApproveButton>
+          </ListItem>
         </List>
       </CardContent>
     </CardContainer>
