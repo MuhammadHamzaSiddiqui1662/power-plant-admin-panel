@@ -10,18 +10,18 @@ export interface UserState {
   users: User[];
   approvedBrokers: User[];
   unApprovedBrokers: User[];
+  suspendedBrokers: User[];
   isLoading: boolean;
   error: string;
-  approvingId: string | null;
 }
 
 const initialState: UserState = {
   users: [],
   approvedBrokers: [],
   unApprovedBrokers: [],
+  suspendedBrokers: [],
   isLoading: false,
   error: "",
-  approvingId: null,
 };
 
 export const getUsersThunk = createAsyncThunk<
@@ -37,19 +37,19 @@ export const getUsersThunk = createAsyncThunk<
   }
 });
 
-export const approveBrokerThunk = createAsyncThunk<
+export const updateBrokerThunk = createAsyncThunk<
   User,
   { id: string; status: string },
   { rejectValue: string }
 >(
-  "user/approve-broker",
+  "user/update-broker",
   async ({ id, status }, { rejectWithValue, dispatch }) => {
     try {
       const updatedUser = await updateBrokerStatus(id, status);
       dispatch(getUsersThunk());
       return updatedUser;
     } catch (error) {
-      return rejectWithValue("Failed to approve broker");
+      return rejectWithValue("Failed to update broker");
     }
   }
 );
@@ -88,35 +88,14 @@ export const userSlice = createSlice({
         state.unApprovedBrokers = action.payload.filter(
           (user) => user.brokerStatus === UserStatus.Pending
         );
+        state.suspendedBrokers = action.payload.filter(
+          (user) => user.brokerStatus === UserStatus.Suspended
+        );
         state.isLoading = false;
       })
       .addCase(getUsersThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
-      })
-      .addCase(approveBrokerThunk.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = "";
-        state.approvingId = action.meta.arg.id;
-      })
-      .addCase(approveBrokerThunk.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.approvingId = null;
-        const updatedUser = action.payload;
-        state.users = state.users.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        );
-        state.approvedBrokers = state.users.filter(
-          (user) => user.brokerStatus === UserStatus.Active
-        );
-        state.unApprovedBrokers = state.users.filter(
-          (user) => user.brokerStatus === UserStatus.Pending
-        );
-      })
-      .addCase(approveBrokerThunk.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
-        state.approvingId = null;
       });
   },
 });

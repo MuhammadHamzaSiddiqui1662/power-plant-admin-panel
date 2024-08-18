@@ -16,6 +16,7 @@ export const ROUTES = {
   brokers: "brokers",
   approved: "approved",
   unapproved: "unapproved",
+  suspended: "suspended",
   ip: "ip",
   published: "published",
   inactive: "inactive",

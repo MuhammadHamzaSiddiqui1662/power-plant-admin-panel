@@ -59,4 +59,5 @@ export interface User {
 export enum UserStatus {
   Active = "Active",
   Pending = "Pending",
+  Suspended = "Suspended",
 }

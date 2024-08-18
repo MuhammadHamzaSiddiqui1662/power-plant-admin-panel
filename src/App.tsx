@@ -22,6 +22,7 @@ import UserDetails from "./components/UserDetails/UserDetails";
 import IpDetailsPage from "./components/IpDetails/IpDetails";
 import "react-toastify/dist/ReactToastify.css";
 import PendingIPs from "./pages/Ip/Pending/pending";
+import SuspendedBrokers from "./pages/Brokers/Suspended/Suspended";
 
 function App() {
   useEffect(() => {
@@ -99,6 +100,10 @@ function App() {
             {
               path: ROUTES.unapproved,
               element: <UnApprovedBrokers />,
+            },
+            {
+              path: ROUTES.suspended,
+              element: <SuspendedBrokers />,
             },
           ],
         },

@@ -89,6 +89,19 @@ export default function Navbar({ width }: { width?: number }) {
               </ListItemButton>
             </NavLink>
           </ListItem>
+          <ListItem>
+            <NavLink
+              to={`${ROUTES.brokers}/${ROUTES.suspended}`}
+              className={`nav-link`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <DownloadingIcon />
+                </ListItemIcon>
+                <ListItemText>Suspended</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
 
           {/* <ListSubheader>Cases</ListSubheader>
           <ListItem>
