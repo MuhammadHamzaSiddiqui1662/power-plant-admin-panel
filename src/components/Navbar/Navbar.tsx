@@ -11,7 +11,11 @@ import { NavLink, useSearchParams } from "react-router-dom";
 import { ROUTES, SEARCH_PARAMS } from "../../config/constants";
 import DownloadingIcon from "@mui/icons-material/Downloading";
 import AutoModeIcon from "@mui/icons-material/AutoMode";
+import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
 import GridViewIcon from "@mui/icons-material/GridView";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import DoDisturbIcon from "@mui/icons-material/DoDisturb";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../config/store";
 import { logout } from "../../features/auth/authSlice";
@@ -55,7 +59,7 @@ export default function Navbar({ width }: { width?: number }) {
             <NavLink to={ROUTES.users} className={"nav-link"}>
               <ListItemButton>
                 <ListItemIcon>
-                  <GridViewIcon />
+                  <PersonOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>Users</ListItemText>
               </ListItemButton>
@@ -70,7 +74,7 @@ export default function Navbar({ width }: { width?: number }) {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  <AutoModeIcon />
+                  <CheckCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>Approved</ListItemText>
               </ListItemButton>
@@ -96,50 +100,12 @@ export default function Navbar({ width }: { width?: number }) {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  <DownloadingIcon />
+                  <DoDisturbIcon />
                 </ListItemIcon>
                 <ListItemText>Suspended</ListItemText>
               </ListItemButton>
             </NavLink>
           </ListItem>
-
-          {/* <ListSubheader>Cases</ListSubheader>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.cases}/${ROUTES.pending}`}
-              className={`nav-link${
-                searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) === ROUTES.pending
-                  ? " active"
-                  : ""
-              }`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <DownloadingIcon />
-                </ListItemIcon>
-                <ListItemText>Pending</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.cases}/${ROUTES.inProgress}`}
-              className={`nav-link${
-                searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) === ROUTES.inProgress
-                  ? " active"
-                  : ""
-              }`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <AutoModeIcon />
-                </ListItemIcon>
-                <ListItemText>In Progress</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem> */}
 
           <ListSubheader>Ips</ListSubheader>
           <ListItem>
@@ -172,7 +138,7 @@ export default function Navbar({ width }: { width?: number }) {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  <DownloadingIcon />
+                  <PauseCircleOutlineIcon />
                 </ListItemIcon>
                 <ListItemText>In Active</ListItemText>
               </ListItemButton>
@@ -190,7 +156,7 @@ export default function Navbar({ width }: { width?: number }) {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  <DownloadingIcon />
+                  <AutoModeIcon sx={{ fontSize: 22 }} />
                 </ListItemIcon>
                 <ListItemText>Pending</ListItemText>
               </ListItemButton>
@@ -217,16 +183,6 @@ export default function Navbar({ width }: { width?: number }) {
           </ListItem>
 
           <ListSubheader>Auth</ListSubheader>
-          {/* <ListItem>
-            <NavLink to={ROUTES.profile} className={"nav-link"}>
-              <ListItemButton>
-                <ListItemIcon>
-                  <PersonOutlineIcon />
-                </ListItemIcon>
-                <ListItemText>Profile</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem> */}
           <ListItem>
             <NavLink
               to={ROUTES.signIn}
