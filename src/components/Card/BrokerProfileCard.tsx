@@ -10,6 +10,7 @@ import {
 } from "../../features/user/userSlice";
 import { Hiring } from "../../types/hiring";
 import { toast } from "react-toastify";
+import { fireServerNotification } from "../../services/notification";
 
 interface CardProps {
   user: User;
@@ -35,7 +36,18 @@ const BrokerProfileCard: React.FC<CardProps> = ({ user }) => {
                 : UserStatus.Active,
           })
         ).unwrap();
-        toast.success("Broker approved successfully!");
+        toast.success(
+          `Broker ${
+            user.brokerStatus === UserStatus.Active ? "suspended" : "approved"
+          } successfully!`
+        );
+        fireServerNotification({
+          message: `Your broker account has been ${
+            user.brokerStatus === UserStatus.Active ? "suspended" : "approved"
+          }!`,
+          imageUrl: user.imageUrl!,
+          userId: user._id,
+        });
       } catch (error) {
         toast.error("Failed to approve broker. Please try again.");
       }
