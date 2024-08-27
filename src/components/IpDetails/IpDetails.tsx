@@ -12,6 +12,7 @@ import { RootState, AppDispatch } from "../../config/store";
 import { Grid, styled, Typography, Box, TextField } from "@mui/material";
 import { IP } from "../../types/ip";
 import { IpStatus } from "../../enums";
+import { fireServerNotification } from "../../services/notification";
 
 const ProfileImage = styled("img")({
   width: "100%",
@@ -149,6 +150,17 @@ const IpDetailsPage: React.FC = () => {
       } = await dispatch(patentIpThunk(formData));
       if (status !== 200) return console.log("error", "Error patenting ip!");
       dispatch(getIPsThunk());
+      await fireServerNotification({
+        message: `Your IP ${selectedIp.name} has been ${
+          selectedIp.status === IpStatus.AppliedForPatent
+            ? `patented with patent#${patentDetails.patentNumber}`
+            : selectedIp.status === IpStatus.Published
+            ? "moved to pending state"
+            : "published"
+        }!`,
+        imageUrl: selectedIp.mainImg!,
+        userId: selectedIp.userId,
+      });
     }
   };
 
