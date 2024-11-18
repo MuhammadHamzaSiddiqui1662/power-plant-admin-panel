@@ -5,11 +5,6 @@ export interface IPSection {
   content: string;
 }
 
-export interface IPImage {
-  url: string;
-  description?: string;
-}
-
 export interface IP {
   _id: string;
   name: string;
@@ -23,7 +18,7 @@ export interface IP {
   trademark?: string;
   copyright?: string;
   mainImg: string;
-  images: IPImage[];
+  images: string[];
   sections: IPSection[];
   userId: string;
 }

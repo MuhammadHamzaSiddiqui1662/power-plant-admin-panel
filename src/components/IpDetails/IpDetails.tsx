@@ -200,11 +200,7 @@ const IpDetailsPage: React.FC = () => {
           <CardContainer>
             <CardContent>
               <div className="relative" style={{ marginBottom: 16 }}>
-                <ProfileImage
-                  src="https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s"
-                  alt="Profile"
-                />
-                {/* <ProfileImage src={selectedIp.mainImg} alt="Profile" /> */}
+                <ProfileImage src={selectedIp.mainImg!} alt="Main Image" />
               </div>
               <Title>{selectedIp.name}</Title>
               <Description>{selectedIp.description}</Description>
@@ -279,19 +275,27 @@ const IpDetailsPage: React.FC = () => {
             <CardContent>
               <Title>Images</Title>
               <Grid container spacing={2}>
-                {selectedIp.images.map((image, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
+                {selectedIp.images.map((url) => (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    key={url}
+                    height={200}
+                    // bgcolor={"#000"}
+                  >
                     <img
-                      src="https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU"
-                      //   src={image.url}
-                      alt={`Image ${index}`}
-                      style={{ width: "100%", borderRadius: "8px" }}
+                      src={url}
+                      alt={url}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        borderRadius: "8px",
+                        backgroundColor: "#000",
+                      }}
                     />
-                    {image.description && (
-                      <Typography variant="body2">
-                        {image.description}
-                      </Typography>
-                    )}
                   </Grid>
                 ))}
               </Grid>
