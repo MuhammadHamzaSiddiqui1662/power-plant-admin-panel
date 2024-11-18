@@ -8,7 +8,9 @@ interface CardProps {
 
 const GeneralProfileCard: React.FC<CardProps> = ({ user }) => {
   const ProfileImage = styled("img")({
-    width: "20%",
+    width: 148,
+    height: 148,
+    objectFit: "cover",
     borderRadius: "12px",
     boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
     transition: "transform 0.3s ease-in-out",
@@ -81,10 +83,7 @@ const GeneralProfileCard: React.FC<CardProps> = ({ user }) => {
           General Bio
         </Typography>
         <div className="relative">
-          <ProfileImage
-            src="https://fastly.picsum.photos/id/413/200/200.jpg?hmac=e6w034LWyRaayerJY_efJywx28FwPjv-EC8F10jVtMQ"
-            alt="Profile"
-          />
+          <ProfileImage src={user.imageUrl} alt="Profile" />
         </div>
         <Title>{user.name}</Title>
         <Description>{user.about || "No about info added."}</Description>
