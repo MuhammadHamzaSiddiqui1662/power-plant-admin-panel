@@ -102,6 +102,7 @@ export default function SignIn() {
             label="Password"
             name="password"
             variant="filled"
+            type="password"
             size="small"
             fullWidth
             value={formData.password}
