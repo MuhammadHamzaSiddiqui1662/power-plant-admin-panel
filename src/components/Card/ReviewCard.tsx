@@ -93,10 +93,7 @@ const ReviewCard: React.FC<CardProps> = ({ review }) => {
         <List>
           <ListItem>
             <Stack direction={"row"} gap={2}>
-              <ProfileImage
-                src="https://fastly.picsum.photos/id/413/200/200.jpg?hmac=e6w034LWyRaayerJY_efJywx28FwPjv-EC8F10jVtMQ"
-                alt="Profile"
-              />
+              <ProfileImage src={reviewer.imageUrl} alt="Profile" />
               <Stack>
                 <Title>{reviewer.name}</Title>
                 <Email>{reviewer.email}</Email>
