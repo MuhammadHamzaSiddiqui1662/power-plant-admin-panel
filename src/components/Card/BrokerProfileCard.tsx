@@ -174,14 +174,14 @@ const BrokerProfileCard: React.FC<CardProps> = ({ user }) => {
           <ListItem>
             <Label>Reviews</Label>
             <Value>
-              {user.reviewsAsInvestor && user.reviewsAsInvestor.length > 0 ? (
+              {user.reviewsAsBorker && user.reviewsAsBorker.length > 0 ? (
                 <Stack
                   direction={"row"}
                   overflow={"auto"}
                   gap={4}
                   width={"100%"}
                 >
-                  {user.reviewsAsInvestor?.map((review) => (
+                  {user.reviewsAsBorker?.map((review) => (
                     <ReviewCard review={review} />
                   ))}
                 </Stack>
