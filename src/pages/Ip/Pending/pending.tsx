@@ -13,7 +13,7 @@ export default function PendingIPs() {
   const data = useAppSelector((state) => state.ip.pendingIPs);
 
   const handleRowClick = (row: IP) => {
-    navigate(`/${ROUTES.ip}/${row._id}`);
+    navigate(`/${ROUTES.ips}/${row._id}`);
   };
 
   const handleDeleteRow = (rowId: any) => {

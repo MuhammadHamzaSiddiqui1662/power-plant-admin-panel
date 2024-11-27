@@ -13,7 +13,7 @@ export default function AppliedForPatentIPs() {
   const data = useAppSelector((state) => state.ip.appliedForPatentIPs);
 
   const handleRowClick = (row: IP) => {
-    navigate(`/${ROUTES.ip}/${row._id}`);
+    navigate(`/${ROUTES.ips}/${row._id}`);
   };
 
   const handleDeleteRow = (rowId: any) => {

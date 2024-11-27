@@ -22,7 +22,7 @@ export const ROUTES = {
   approved: "approved",
   unapproved: "unapproved",
   suspended: "suspended",
-  ip: "ip",
+  ips: "ips",
   published: "published",
   inactive: "inactive",
   draft: "draft",

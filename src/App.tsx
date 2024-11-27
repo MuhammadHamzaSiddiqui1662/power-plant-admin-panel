@@ -23,6 +23,7 @@ import IpDetailsPage from "./components/IpDetails/IpDetails";
 import "react-toastify/dist/ReactToastify.css";
 import PendingIPs from "./pages/Ip/Pending/pending";
 import SuspendedBrokers from "./pages/Brokers/Suspended/Suspended";
+import IPs from "./pages/Ip/Ips";
 
 function App() {
   useEffect(() => {
@@ -59,7 +60,11 @@ function App() {
           element: <UserDetails />,
         },
         {
-          path: `${ROUTES.ip}/:id`,
+          path: `${ROUTES.ips}`,
+          element: <IPs />,
+        },
+        {
+          path: `${ROUTES.ips}/:id`,
           element: <IpDetailsPage />,
         },
         // {
@@ -108,7 +113,7 @@ function App() {
           ],
         },
         {
-          path: ROUTES.ip,
+          path: ROUTES.ips,
           element: <Outlet />,
           children: [
             {
