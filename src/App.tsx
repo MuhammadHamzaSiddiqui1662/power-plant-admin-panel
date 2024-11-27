@@ -60,11 +60,11 @@ function App() {
           element: <UserDetails />,
         },
         {
-          path: `${ROUTES.ip}`,
+          path: `${ROUTES.ips}`,
           element: <IPs />,
         },
         {
-          path: `${ROUTES.ip}/:id`,
+          path: `${ROUTES.ips}/:id`,
           element: <IpDetailsPage />,
         },
         // {
@@ -113,7 +113,7 @@ function App() {
           ],
         },
         {
-          path: ROUTES.ip,
+          path: ROUTES.ips,
           element: <Outlet />,
           children: [
             {

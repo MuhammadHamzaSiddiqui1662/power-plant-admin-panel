@@ -66,7 +66,7 @@ export default function Navbar({ width }: { width?: number }) {
             </NavLink>
           </ListItem>
           <ListItem>
-            <NavLink to={ROUTES.ip} className={"nav-link"}>
+            <NavLink to={ROUTES.ips} className={"nav-link"}>
               <ListItemButton>
                 <ListItemIcon>
                   <PersonOutlineIcon />
@@ -120,7 +120,7 @@ export default function Navbar({ width }: { width?: number }) {
           <ListSubheader>Ips</ListSubheader>
           <ListItem>
             <NavLink
-              to={`${ROUTES.ip}/${ROUTES.published}`}
+              to={`${ROUTES.ips}/${ROUTES.published}`}
               className={`nav-link${
                 searchParams.get(SEARCH_PARAMS.status) &&
                 searchParams.get(SEARCH_PARAMS.status) === ROUTES.published
@@ -138,7 +138,7 @@ export default function Navbar({ width }: { width?: number }) {
           </ListItem>
           <ListItem>
             <NavLink
-              to={`${ROUTES.ip}/${ROUTES.inactive}`}
+              to={`${ROUTES.ips}/${ROUTES.inactive}`}
               className={`nav-link${
                 searchParams.get(SEARCH_PARAMS.status) &&
                 searchParams.get(SEARCH_PARAMS.status) === ROUTES.inactive
@@ -156,7 +156,7 @@ export default function Navbar({ width }: { width?: number }) {
           </ListItem>
           <ListItem>
             <NavLink
-              to={`${ROUTES.ip}/${ROUTES.pending}`}
+              to={`${ROUTES.ips}/${ROUTES.pending}`}
               className={`nav-link${
                 searchParams.get(SEARCH_PARAMS.status) &&
                 searchParams.get(SEARCH_PARAMS.status) === ROUTES.pending
@@ -174,7 +174,7 @@ export default function Navbar({ width }: { width?: number }) {
           </ListItem>
           <ListItem>
             <NavLink
-              to={`${ROUTES.ip}/${ROUTES.appliedForPatent}`}
+              to={`${ROUTES.ips}/${ROUTES.appliedForPatent}`}
               className={`nav-link${
                 searchParams.get(SEARCH_PARAMS.status) &&
                 searchParams.get(SEARCH_PARAMS.status) ===

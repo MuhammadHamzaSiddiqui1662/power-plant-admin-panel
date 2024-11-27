@@ -39,7 +39,7 @@ export default function IPs() {
   };
 
   const handleRowClick = (row: IP) => {
-    navigate(`/${ROUTES.ip}/${row._id}`);
+    navigate(`/${ROUTES.ips}/${row._id}`);
   };
 
   return (
