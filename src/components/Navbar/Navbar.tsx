@@ -65,6 +65,16 @@ export default function Navbar({ width }: { width?: number }) {
               </ListItemButton>
             </NavLink>
           </ListItem>
+          <ListItem>
+            <NavLink to={ROUTES.ip} className={"nav-link"}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <PersonOutlineIcon />
+                </ListItemIcon>
+                <ListItemText>IPs</ListItemText>
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
 
           <ListSubheader>Brokers</ListSubheader>
           <ListItem>
