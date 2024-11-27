@@ -2,11 +2,11 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "../features/auth/authSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
-// import saleDeedSlice from "../features/saleDeed/saleDeedSlice";
 import ipSlice from "../features/ip/ipSlice";
 import userSlice from "../features/user/userSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
+import { ipApi } from "../services/ip";
 
 // Persist configuration for auth slice
 const authPersistConfig = {
@@ -17,13 +17,15 @@ const authPersistConfig = {
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authSlice),
   ip: ipSlice,
+  [ipApi.reducerPath]: ipApi.reducer,
   user: userSlice,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   // @ts-ignore
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(logger).concat(ipApi.middleware),
   devTools: true,
 });
 
