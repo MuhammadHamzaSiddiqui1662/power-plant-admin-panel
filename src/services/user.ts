@@ -19,3 +19,13 @@ export const getUserHirings = async (id: string) => {
   const response = await api.get(`/admin/hirings/${id}`);
   return response.data;
 };
+
+export const updateUser = async (id: string, data: Partial<User>) => {
+  const response = await api.put(`${baseUrl}/${id}`, data);
+  return response.data;
+};
+
+export const deleteUser = async (id: string) => {
+  const response = await api.delete(`${baseUrl}/${id}`);
+  return response.data;
+};

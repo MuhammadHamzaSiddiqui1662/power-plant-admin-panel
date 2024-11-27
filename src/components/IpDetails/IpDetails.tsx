@@ -1,18 +1,32 @@
 import React, {
   ChangeEvent,
   FormEvent,
+  useCallback,
   useEffect,
   useMemo,
   useState,
 } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getIPsThunk, patentIpThunk } from "../../features/ip/ipSlice";
+import {
+  getIPsThunk,
+  patentIpThunk,
+  updateIPDetailsThunk,
+} from "../../features/ip/ipSlice";
 import { RootState, AppDispatch } from "../../config/store";
-import { Grid, styled, Typography, Box, TextField } from "@mui/material";
+import {
+  Grid,
+  styled,
+  Typography,
+  Box,
+  TextField,
+  IconButton,
+} from "@mui/material";
 import { IP } from "../../types/ip";
 import { IpStatus } from "../../enums";
 import { fireServerNotification } from "../../services/notification";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 
 const ProfileImage = styled("img")({
   width: "100%",
@@ -113,6 +127,7 @@ const SectionContainer = styled(CardContainer)({
 
 const IpDetailsPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams<{ id: string }>();
   const { ips, isLoading, error } = useSelector((state: RootState) => state.ip);
   const selectedIp = useMemo(() => ips.find((ip) => ip._id === id), [ips, id]);
@@ -125,7 +140,56 @@ const IpDetailsPage: React.FC = () => {
       new Date()
     ),
   });
-  console.log("patentDetails", patentDetails);
+  const [editedIp, setEditedIp] = useState(selectedIp);
+  const [editableFields, setEditableFields] = useState<Partial<IP>>({
+    name: selectedIp?.name,
+    description: selectedIp?.description,
+    categories: selectedIp?.categories,
+    publishedDate: selectedIp?.publishedDate,
+    price: selectedIp?.price,
+    status: selectedIp?.status,
+  });
+
+  const placeholderImage = "https://placehold.co/600x400";
+
+  const handleSave = async () => {
+    if (selectedIp) {
+      const updatedIp: IP = {
+        ...selectedIp,
+        ...editableFields,
+        userDetails: selectedIp.userDetails || {},
+        _id: selectedIp._id,
+      };
+
+      const updatedDetails: Partial<IP> = {
+        name: editableFields.name,
+        description: editableFields.description,
+        categories: editableFields.categories,
+        publishedDate: editableFields.publishedDate,
+        price: editableFields.price,
+        status: editableFields.status,
+      };
+      await dispatch(
+        updateIPDetailsThunk({ ipId: selectedIp._id, details: updatedDetails })
+      );
+
+      setIsEditing(false);
+
+      await setEditedIp(updatedIp);
+    }
+  };
+
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+    setEditableFields({ ...editedIp });
+  };
+
+  const handleInputChange = useCallback((field: keyof IP, value: any) => {
+    setEditableFields((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -178,6 +242,21 @@ const IpDetailsPage: React.FC = () => {
     dispatch(getIPsThunk());
   }, [dispatch]);
 
+  useEffect(() => {
+    const updateFields = async () => {
+      await setEditedIp(selectedIp);
+      await setEditableFields({
+        name: selectedIp?.name,
+        description: selectedIp?.description,
+        categories: selectedIp?.categories,
+        publishedDate: selectedIp?.publishedDate,
+        price: selectedIp?.price,
+        status: selectedIp?.status,
+      });
+    };
+    updateFields();
+  }, [selectedIp]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -194,37 +273,139 @@ const IpDetailsPage: React.FC = () => {
     <Box sx={{ p: 3 }}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Typography variant="h4">IP Details</Typography>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h4">IP Details</Typography>
+            <IconButton onClick={isEditing ? handleSave : handleEditToggle}>
+              {isEditing ? <SaveIcon /> : <EditIcon />}
+            </IconButton>
+          </Box>
         </Grid>
         <Grid item xs={12} component={"form"} onSubmit={handleSubmit}>
           <CardContainer>
             <CardContent>
               <div className="relative" style={{ marginBottom: 16 }}>
-                <ProfileImage src={selectedIp.mainImg!} alt="Main Image" />
+                <ProfileImage
+                  src={selectedIp.mainImg!}
+                  alt="Main Image"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = placeholderImage;
+                  }}
+                />
               </div>
-              <Title>{selectedIp.name}</Title>
-              <Description>{selectedIp.description}</Description>
+              {isEditing ? (
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Name"
+                  value={editableFields.name ?? ""}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  sx={{ marginBottom: 2 }}
+                />
+              ) : (
+                <Title>{editedIp?.name}</Title>
+              )}
+
+              {isEditing ? (
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  label="Description"
+                  value={editableFields.description ?? ""}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
+                  sx={{ marginBottom: 2 }}
+                />
+              ) : (
+                <>
+                  <Label>Description</Label>
+                  <Description>{editedIp?.description}</Description>
+                </>
+              )}
 
               <List>
                 <ListItem>
-                  <Label>Categories</Label>
-                  <Value>{selectedIp.categories.join(", ")}</Value>
+                  {isEditing ? (
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Categories"
+                      value={editableFields.categories?.join(", ") ?? ""}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "categories",
+                          e.target.value.split(",").map((cat) => cat.trim())
+                        )
+                      }
+                      sx={{ marginBottom: 2 }}
+                    />
+                  ) : (
+                    <>
+                      <Label>Categories</Label>
+                      <Value>{editedIp?.categories.join(", ")}</Value>
+                    </>
+                  )}
                 </ListItem>
                 <ListItem>
-                  <Label>Published Year</Label>
-                  <Value>
-                    {new Date(selectedIp.publishedDate).getFullYear()}
-                  </Value>
+                  <Label>Published Date</Label>
+                  {isEditing ? (
+                    <TextField
+                      fullWidth
+                      type="date"
+                      variant="outlined"
+                      value={
+                        editableFields.publishedDate
+                          ? new Date(editableFields.publishedDate)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) =>
+                        handleInputChange(
+                          "publishedDate",
+                          new Date(e.target.value)
+                        )
+                      }
+                      sx={{ marginBottom: 2 }}
+                    />
+                  ) : (
+                    <Value>
+                      {editedIp?.publishedDate
+                        ? new Date(editedIp?.publishedDate).toLocaleDateString()
+                        : "No date available"}
+                    </Value>
+                  )}
                 </ListItem>
                 <ListItem>
-                  <Label>Price</Label>
-                  <Value>${selectedIp.price}</Value>
+                  {isEditing ? (
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      label="Price"
+                      type="number"
+                      value={editedIp?.price ?? ""}
+                      onChange={(e) =>
+                        handleInputChange("price", parseFloat(e.target.value))
+                      }
+                      sx={{ marginBottom: 2 }}
+                    />
+                  ) : (
+                    <>
+                      <Label>Price</Label>
+                      <Value>${editedIp?.price}</Value>
+                    </>
+                  )}
                 </ListItem>
                 <ListItem>
                   <Label>Status</Label>
                   <Value>{selectedIp.status}</Value>
                 </ListItem>
               </List>
+
               {selectedIp &&
                 selectedIp.status === IpStatus.AppliedForPatent && (
                   <Grid container maxWidth={600} spacing={2}>
@@ -267,6 +448,32 @@ const IpDetailsPage: React.FC = () => {
               )}
             </CardContent>
           </CardContainer>
+        </Grid>
+
+        <Grid item xs={12}>
+          <SectionContainer>
+            <CardContent>
+              <SectionTitle>User Details</SectionTitle>
+              <List>
+                <ListItem>
+                  <Label>Username</Label>
+                  <Value>{selectedIp.userDetails?.name || "N/A"}</Value>
+                </ListItem>
+                <ListItem>
+                  <Label>Email</Label>
+                  <Value>{selectedIp.userDetails?.email || "N/A"}</Value>
+                </ListItem>
+                <ListItem>
+                  <Label>Phone</Label>
+                  <Value>{selectedIp.userDetails?.phone || "N/A"}</Value>
+                </ListItem>
+                <ListItem>
+                  <Label>Address</Label>
+                  <Value>{selectedIp.userDetails?.address || "N/A"}</Value>
+                </ListItem>
+              </List>
+            </CardContent>
+          </SectionContainer>
         </Grid>
 
         {/* Images Section */}

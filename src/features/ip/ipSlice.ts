@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { getIPs, publishIp, updateIP } from "../../services/ip";
+import { deleteIP, getIPs, publishIp, updateIP } from "../../services/ip";
 import { IP } from "../../types/ip";
 import { IpStatus } from "../../enums";
 import { api } from "../../config/axios";
@@ -65,6 +65,22 @@ export const patentIpThunk = createAsyncThunk(
   }
 );
 
+export const updateIPThunk = createAsyncThunk<
+  IP,
+  { ipId: string; data: Partial<IP> }
+>("ip/update", async ({ ipId, data }) => {
+  const { result } = await updateIP(ipId, data);
+  return result;
+});
+
+export const deleteIPThunk = createAsyncThunk(
+  "ip/delete",
+  async (ipId: string) => {
+    await deleteIP(ipId);
+    return ipId;
+  }
+);
+
 export const ipSlice = createSlice({
   name: "ip",
   initialState,
@@ -74,10 +90,8 @@ export const ipSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      getIPsThunk.fulfilled,
-      (state, action: PayloadAction<IP[]>) => {
-        console.log("Data received in Redux:", action.payload); // Debugging
+    builder
+      .addCase(getIPsThunk.fulfilled, (state, action: PayloadAction<IP[]>) => {
         state.ips = action.payload;
         state.publishedIPs = action.payload.filter(
           (ip) => ip.status === IpStatus.Published
@@ -95,8 +109,39 @@ export const ipSlice = createSlice({
           (ip) => ip.status === IpStatus.Pending
         );
         state.isLoading = false;
-      }
-    );
+      })
+      .addCase(
+        deleteIPThunk.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          const deletedIpId = action.payload; // The deleted IP ID
+          state.ips = state.ips.filter((ip) => ip._id !== deletedIpId);
+          state.publishedIPs = state.publishedIPs.filter(
+            (ip) => ip._id !== deletedIpId
+          );
+          state.appliedForPatentIPs = state.appliedForPatentIPs.filter(
+            (ip) => ip._id !== deletedIpId
+          );
+          state.inActiveIPs = state.inActiveIPs.filter(
+            (ip) => ip._id !== deletedIpId
+          );
+          state.draftIPs = state.draftIPs.filter(
+            (ip) => ip._id !== deletedIpId
+          );
+          state.pendingIPs = state.pendingIPs.filter(
+            (ip) => ip._id !== deletedIpId
+          );
+        }
+      )
+      .addCase(updateIPThunk.fulfilled, (state, action: PayloadAction<IP>) => {
+        const index = state.ips.findIndex(
+          (ip) => ip._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.ips[index] = action.payload;
+        } else {
+          console.log("IP not found in state:", action.payload._id);
+        }
+      });
   },
 });
 

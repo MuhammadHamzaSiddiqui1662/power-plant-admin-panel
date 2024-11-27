@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RootState } from "../../config/store";
-import { getUsersThunk } from "../../features/user/userSlice";
+import { getUsersThunk, updateUserThunk } from "../../features/user/userSlice";
 import { AppDispatch } from "../../config/store";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -30,6 +30,10 @@ export default function UserDetails() {
     dispatch(getUsersThunk());
   }, [dispatch, userId]);
 
+  const handleUpdateUser = (id: string, data: Partial<User>) => {
+    dispatch(updateUserThunk({ id, data }));
+  };
+
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -47,7 +51,10 @@ export default function UserDetails() {
       <Typography variant="h4" gutterBottom>
         User Profile
       </Typography>
-      <GeneralProfileCard user={user} />
+      <GeneralProfileCard
+        user={user}
+        onSave={(updatedUser) => handleUpdateUser(user._id, updatedUser)}
+      />
       <InnovatorProfileCard user={user} />
       <InvestorProfileCard user={user} />
       <BrokerProfileCard user={user} />

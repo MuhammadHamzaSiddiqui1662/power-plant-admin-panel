@@ -6,6 +6,7 @@ export interface IPSection {
 }
 
 export interface IP {
+  userDetails: any;
   _id: string;
   name: string;
   description: string;

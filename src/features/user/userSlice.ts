@@ -4,6 +4,8 @@ import {
   getUserHirings,
   getUsers,
   updateBrokerStatus,
+  updateUser,
+  deleteUser,
 } from "../../services/user";
 
 export interface UserState {
@@ -66,6 +68,20 @@ export const getUserHiringsThunk = createAsyncThunk(
   }
 );
 
+export const deleteUserThunk = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("user/delete-user", async (id, { rejectWithValue, dispatch }) => {
+  try {
+    await deleteUser(id);
+    dispatch(getUsersThunk());
+    return "User deleted successfully";
+  } catch (error) {
+    return rejectWithValue("Failed to delete user");
+  }
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -96,8 +112,45 @@ export const userSlice = createSlice({
       .addCase(getUsersThunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      .addCase(updateUserThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = "";
+      })
+      .addCase(updateUserThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(updateUserThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteUserThunk.pending, (state) => {
+        state.isLoading = true;
+        state.error = "";
+      })
+      .addCase(deleteUserThunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = "";
+      })
+      .addCase(deleteUserThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
+});
+
+export const updateUserThunk = createAsyncThunk<
+  User,
+  { id: string; data: Partial<User> },
+  { rejectValue: string }
+>("user/update-user", async ({ id, data }, { rejectWithValue, dispatch }) => {
+  try {
+    const updatedUser = await updateUser(id, data);
+    dispatch(getUsersThunk());
+    return updatedUser;
+  } catch (error) {
+    return rejectWithValue("Failed to update user");
+  }
 });
 
 export const { setIPs } = userSlice.actions;

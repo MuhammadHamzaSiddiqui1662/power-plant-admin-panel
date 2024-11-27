@@ -32,13 +32,13 @@ export const createIP = async (formData: FormData): Promise<{ result: IP }> => {
   return response.data;
 };
 
-export const updateIP = async (
-  ipId: string,
-  formData: FormData
-): Promise<{ result: IP }> => {
-  const response = await api.put(`${baseUrl}/${ipId}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+export const updateIP = async (ipId: string, data: Partial<IP>) => {
+  console.log("Data received by updateIP:", data);
+
+  const response = await api.put(`${baseUrl}/${ipId}`, data, {
+    headers: { "Content-Type": "application/json" },
   });
+  console.log(response.data);
   return response.data;
 };
 
