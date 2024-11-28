@@ -27,6 +27,29 @@ import { IpStatus } from "../../enums";
 import { fireServerNotification } from "../../services/notification";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import { Document, Page } from "react-pdf";
+// import "@react-pdf-viewer/core/lib/styles/index.css";
+// import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+
+const PdfContainer = styled("div")({
+  width: "100%",
+  height: "auto",
+  marginTop: "24px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const PdfViewer = styled("div")({
+  width: "100%",
+  maxWidth: "800px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  overflow: "hidden",
+  padding: "16px",
+  backgroundColor: "#fff",
+});
 
 const ProfileImage = styled("img")({
   width: "100%",
@@ -151,6 +174,7 @@ const IpDetailsPage: React.FC = () => {
   });
 
   const placeholderImage = "https://placehold.co/600x400";
+  const pdfFileUrl = selectedIp?.patentDocument;
 
   const handleSave = async () => {
     if (selectedIp) {
@@ -190,12 +214,106 @@ const IpDetailsPage: React.FC = () => {
       [field]: value,
     }));
   }, []);
+  //   e.preventDefault();
+  //   if (!selectedIp) return;
+
+  //   try {
+  //     const formData = new FormData();
+
+  //     const payload: IP =
+  //       selectedIp.status === IpStatus.AppliedForPatent
+  //         ? {
+  //             ...selectedIp,
+  //             patentNumber: patentDetails.patentNumber,
+  //             publishedDate: new Date(patentDetails.publishedDate),
+  //             status: IpStatus.InActive,
+  //           }
+  //         : selectedIp.status === IpStatus.Published
+  //         ? { ...selectedIp, status: IpStatus.Pending }
+  //         : { ...selectedIp, status: IpStatus.Published };
+
+  //     formData.append("data", JSON.stringify(payload));
+
+  //     const pdfFileInput = document.getElementById(
+  //       "patentDocument"
+  //     ) as HTMLInputElement;
+  //     if (pdfFileInput?.files?.[0]) {
+  //       formData.append("patentDocument", pdfFileInput.files[0]);
+  //     }
+
+  //     const imageInput = document.getElementById(
+  //       "imageUpload"
+  //     ) as HTMLInputElement;
+  //     if (imageInput?.files?.[0]) {
+  //       formData.append("image", imageInput.files[0]);
+  //     }
+
+  //     const response = await fetch(`/api/uploadPatent`, {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+
+  //     const result = await response.json();
+  //     if (response.ok) {
+  //       console.log("Patent submission successful", result);
+  //       dispatch(getIPsThunk());
+
+  //       await fireServerNotification({
+  //         message: `Your IP ${selectedIp.name} has been patented with Patent#${patentDetails.patentNumber}!`,
+  //         imageUrl: selectedIp.mainImg!,
+  //         userId: selectedIp.userId,
+  //       });
+  //     } else {
+  //       console.error("Error in patent submission:", result);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during patent submission:", error);
+  //   }
+  // };
+
+  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (selectedIp) {
+  //     const formData = new FormData();
+  //     const payload: IP =
+  //       selectedIp.status === IpStatus.AppliedForPatent
+  //         ? {
+  //             ...selectedIp,
+  //             patentNumber: patentDetails.patentNumber,
+  //             publishedDate: new Date(patentDetails.publishedDate),
+  //             status: IpStatus.InActive,
+  //           }
+  //         : selectedIp.status === IpStatus.Published
+  //         ? { ...selectedIp, status: IpStatus.Pending }
+  //         : { ...selectedIp, status: IpStatus.Published };
+  //     console.log(payload);
+  //     formData.append("data", JSON.stringify(payload));
+  //     const {
+  //       // @ts-ignore
+  //       payload: { status },
+  //     } = await dispatch(patentIpThunk(formData));
+  //     if (status !== 200) return console.log("error", "Error patenting ip!");
+  //     dispatch(getIPsThunk());
+  //     await fireServerNotification({
+  //       message: `Your IP ${selectedIp.name} has been ${
+  //         selectedIp.status === IpStatus.AppliedForPatent
+  //           ? `patented with patent#${patentDetails.patentNumber}`
+  //           : selectedIp.status === IpStatus.Published
+  //           ? "moved to pending state"
+  //           : "published"
+  //       }!`,
+  //       imageUrl: selectedIp.mainImg!,
+  //       userId: selectedIp.userId,
+  //     });
+  //   }
+  // };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (selectedIp) {
-      const formData = new FormData();
-      const payload: IP =
+    if (!selectedIp) return;
+
+    try {
+      const payload: Partial<IP> =
         selectedIp.status === IpStatus.AppliedForPatent
           ? {
               ...selectedIp,
@@ -206,14 +324,40 @@ const IpDetailsPage: React.FC = () => {
           : selectedIp.status === IpStatus.Published
           ? { ...selectedIp, status: IpStatus.Pending }
           : { ...selectedIp, status: IpStatus.Published };
-      console.log(payload);
-      formData.append("data", JSON.stringify(payload));
-      const {
-        // @ts-ignore
-        payload: { status },
-      } = await dispatch(patentIpThunk(formData));
-      if (status !== 200) return console.log("error", "Error patenting ip!");
+
+      const files: { patentDocument?: File; image?: File } = {};
+
+      const pdfFileInput = document.getElementById(
+        "patentDocument"
+      ) as HTMLInputElement;
+      if (pdfFileInput?.files?.[0]) {
+        files.patentDocument = pdfFileInput.files[0];
+      }
+
+      const imageInput = document.getElementById(
+        "imageUpload"
+      ) as HTMLInputElement;
+      if (imageInput?.files?.[0]) {
+        files.image = imageInput.files[0];
+      }
+
+      // Dispatch the thunk with IP data and optional files
+      const response = await dispatch(
+        patentIpThunk({
+          ipId: selectedIp._id,
+          ipData: payload,
+          files,
+        })
+      );
+
+      if (response?.error) {
+        console.error("Error in patenting IP:", response.error.message);
+        return;
+      }
+
+      console.log("Patent submission successful");
       dispatch(getIPsThunk());
+
       await fireServerNotification({
         message: `Your IP ${selectedIp.name} has been ${
           selectedIp.status === IpStatus.AppliedForPatent
@@ -225,6 +369,8 @@ const IpDetailsPage: React.FC = () => {
         imageUrl: selectedIp.mainImg!,
         userId: selectedIp.userId,
       });
+    } catch (error) {
+      console.error("Error during patent submission:", error);
     }
   };
 
@@ -409,6 +555,64 @@ const IpDetailsPage: React.FC = () => {
               {selectedIp &&
                 selectedIp.status === IpStatus.AppliedForPatent && (
                   <Grid container maxWidth={600} spacing={2}>
+                    {selectedIp.patentDocument && (
+                      <PdfContainer>
+                        <PdfViewer>
+                          <Typography
+                            variant="h6"
+                            style={{ marginBottom: "16px" }}
+                          >
+                            Patent PDF Preview
+                          </Typography>
+                          <Document
+                            file={pdfFileUrl}
+                            onLoadError={(error) =>
+                              console.error("Error loading PDF:", error)
+                            }
+                          >
+                            <Page pageNumber={1} />
+                          </Document>
+                        </PdfViewer>
+                      </PdfContainer>
+                    )}
+                    <Grid item xs={12}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <label
+                          htmlFor="patentDocument"
+                          style={{
+                            fontWeight: "bold",
+                            color: "#333",
+                            marginBottom: "8px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Upload Patent Document (PDF):
+                        </label>
+                        <input
+                          id="patentDocument"
+                          name="patentDocument"
+                          type="file"
+                          accept="application/pdf"
+                          onChange={(event) =>
+                            console.log("File selected:", event.target.files)
+                          }
+                          style={{
+                            padding: "8px",
+                            border: "1px solid #ddd",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </div>
+                    </Grid>
+
                     <Grid item xs={12} md={6}>
                       <TextField
                         label="Patent Number"

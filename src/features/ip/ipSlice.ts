@@ -56,12 +56,43 @@ export const getUserPersonalIps = createAsyncThunk(
   }
 );
 
+// export const patentIpThunk = createAsyncThunk(
+//   "ip/get-user-ips",
+//   async (ip: any) => {
+//     const data = await api.put(`/ips`, ip);
+//     console.log(data);
+//     return data;
+//   }
+// );
+
 export const patentIpThunk = createAsyncThunk(
   "ip/get-user-ips",
-  async (ip: any) => {
-    const data = await api.put(`/ips`, ip);
-    console.log(data);
-    return data;
+  async ({
+    ipId,
+    ipData,
+    files,
+  }: {
+    ipId: string;
+    ipData: any;
+    files?: { patentDocument?: File; image?: File };
+  }) => {
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(ipData));
+
+    if (files?.patentDocument) {
+      formData.append("patentDocument", files.patentDocument);
+    }
+    if (files?.image) {
+      formData.append("image", files.image);
+    }
+
+    const response = await api.put(`/ips/${ipId}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    console.log(response.data);
+    return response.data;
   }
 );
 

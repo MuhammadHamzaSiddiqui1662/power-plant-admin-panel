@@ -22,4 +22,5 @@ export interface IP {
   images: string[];
   sections: IPSection[];
   userId: string;
+  patentDocument: string;
 }
