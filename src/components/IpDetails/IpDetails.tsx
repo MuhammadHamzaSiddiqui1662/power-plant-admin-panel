@@ -299,7 +299,8 @@ const IpDetailsPage: React.FC = () => {
               {isEditing ? (
                 <TextField
                   fullWidth
-                  variant="outlined"
+                  variant="filled"
+                  size="small"
                   label="Name"
                   value={editableFields.name ?? ""}
                   onChange={(e) => handleInputChange("name", e.target.value)}
@@ -312,7 +313,8 @@ const IpDetailsPage: React.FC = () => {
               {isEditing ? (
                 <TextField
                   fullWidth
-                  variant="outlined"
+                  variant="filled"
+                  size="small"
                   label="Description"
                   value={editableFields.description ?? ""}
                   onChange={(e) =>
@@ -332,7 +334,8 @@ const IpDetailsPage: React.FC = () => {
                   {isEditing ? (
                     <TextField
                       fullWidth
-                      variant="outlined"
+                      variant="filled"
+                      size="small"
                       label="Categories"
                       value={editableFields.categories?.join(", ") ?? ""}
                       onChange={(e) =>
@@ -351,12 +354,13 @@ const IpDetailsPage: React.FC = () => {
                   )}
                 </ListItem>
                 <ListItem>
-                  <Label>Published Date</Label>
                   {isEditing ? (
                     <TextField
                       fullWidth
                       type="date"
-                      variant="outlined"
+                      variant="filled"
+                      size="small"
+                      label="Published Date"
                       value={
                         editableFields.publishedDate
                           ? new Date(editableFields.publishedDate)
@@ -373,18 +377,24 @@ const IpDetailsPage: React.FC = () => {
                       sx={{ marginBottom: 2 }}
                     />
                   ) : (
-                    <Value>
-                      {editedIp?.publishedDate
-                        ? new Date(editedIp?.publishedDate).toLocaleDateString()
-                        : "No date available"}
-                    </Value>
+                    <>
+                      <Label>Published Date</Label>
+                      <Value>
+                        {editedIp?.publishedDate
+                          ? new Date(
+                              editedIp?.publishedDate
+                            ).toLocaleDateString()
+                          : "No date available"}
+                      </Value>
+                    </>
                   )}
                 </ListItem>
                 <ListItem>
                   {isEditing ? (
                     <TextField
                       fullWidth
-                      variant="outlined"
+                      variant="filled"
+                      size="small"
                       label="Price"
                       type="number"
                       value={editedIp?.price ?? ""}
@@ -408,7 +418,11 @@ const IpDetailsPage: React.FC = () => {
 
               {selectedIp &&
                 selectedIp.status === IpStatus.AppliedForPatent && (
-                  <Grid container maxWidth={600} spacing={2}>
+                  <Grid
+                    container
+                    maxWidth={isEditing ? undefined : 600}
+                    spacing={2}
+                  >
                     <Grid item xs={12} md={6}>
                       <TextField
                         label="Patent Number"
