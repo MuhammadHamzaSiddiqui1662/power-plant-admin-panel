@@ -21,12 +21,18 @@ import {
   Box,
   TextField,
   IconButton,
+  Stack,
 } from "@mui/material";
 import { IP } from "../../types/ip";
 import { IpStatus } from "../../enums";
 import { fireServerNotification } from "../../services/notification";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import { useDropzone } from "react-dropzone";
+import UploadIcon from "../../assets/images/upload.png";
+import PdfIcon from "../../assets/images/pdfLogo.png";
+import { toast } from "react-toastify";
+import { api } from "../../config/axios";
 
 const ProfileImage = styled("img")({
   width: "100%",
@@ -149,6 +155,16 @@ const IpDetailsPage: React.FC = () => {
     price: selectedIp?.price,
     status: selectedIp?.status,
   });
+  const [patentDoc, setPatentDoc] = useState<File[]>([]);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "application/pdf": [".pdf"],
+    },
+    onDrop: (acceptedFiles) => {
+      setPatentDoc((prev) => [...prev, ...acceptedFiles]);
+    },
+  });
 
   const placeholderImage = "https://placehold.co/600x400";
 
@@ -194,6 +210,17 @@ const IpDetailsPage: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedIp) {
+      if (selectedIp.status === IpStatus.AppliedForPatent) {
+        if (!patentDetails.patentNumber || !patentDetails.publishedDate) {
+          toast.error("Please fill in all fields!");
+          return console.log("error", "Please fill in all fields!");
+        }
+        if (patentDoc.length === 0) {
+          toast.error("Please upload patent document!");
+          return console.log("error", "Please upload patent document!");
+        }
+      }
+
       const formData = new FormData();
       const payload: IP =
         selectedIp.status === IpStatus.AppliedForPatent
@@ -213,11 +240,23 @@ const IpDetailsPage: React.FC = () => {
         payload: { status },
       } = await dispatch(patentIpThunk(formData));
       if (status !== 200) return console.log("error", "Error patenting ip!");
+      if (selectedIp.status === IpStatus.AppliedForPatent) {
+        const fileData = new FormData();
+        for (const file of patentDoc) {
+          fileData.append("files", file);
+        }
+        const { status: fileStatus } = await api.post(
+          `/email/patent-docs/${selectedIp._id}`,
+          fileData
+        );
+        if (fileStatus !== 200)
+          return console.log("error", "Error sending patent docs!");
+      }
       dispatch(getIPsThunk());
       await fireServerNotification({
         message: `Your IP ${selectedIp.name} has been ${
           selectedIp.status === IpStatus.AppliedForPatent
-            ? `patented with patent#${patentDetails.patentNumber}`
+            ? `patented with patent#${patentDetails.patentNumber}. Find your patent documents in your email!`
             : selectedIp.status === IpStatus.Published
             ? "moved to pending state"
             : "published"
@@ -447,7 +486,61 @@ const IpDetailsPage: React.FC = () => {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <ApproveButton type="submit">Patent</ApproveButton>
+                      <Stack direction="row" spacing={2}>
+                        {patentDoc.map((file) => (
+                          <Box
+                            key={file.name}
+                            sx={{
+                              border: "2px solid #c00",
+                              borderRadius: "8px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              cursor: "pointer",
+                              height: 100,
+                              width: 100,
+                            }}
+                          >
+                            <img src={PdfIcon} width="30%" height="30%" />
+                            <p style={{ fontSize: "0.75rem", color: "#c00" }}>
+                              {file.name}
+                            </p>
+                          </Box>
+                        ))}
+
+                        <Box
+                          {...getRootProps()}
+                          sx={{
+                            border: "2px solid #ccc",
+                            borderRadius: "8px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            height: 100,
+                            width: 100,
+                          }}
+                        >
+                          <input {...getInputProps()} />
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <img src={UploadIcon} width="30%" height="30%" />
+
+                            <p style={{ fontSize: "0.75rem", color: "#888" }}>
+                              Upload PDF
+                            </p>
+                          </Box>
+                        </Box>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <ApproveButton type="submit">Proceed</ApproveButton>
                     </Grid>
                   </Grid>
                 )}
