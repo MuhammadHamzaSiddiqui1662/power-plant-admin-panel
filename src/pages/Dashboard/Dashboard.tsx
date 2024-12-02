@@ -35,14 +35,14 @@ export default function Dashboard() {
             value={users.length.toString()}
           />
         </NavLink>
-        <NavLink to={`${ROUTES.ip}/appliedForPatent`} className={"nav-link"}>
+        <NavLink to={`${ROUTES.ips}/appliedForPatent`} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Applied for patent"
             value={appliedForPatentIPs.length.toString()}
           />
         </NavLink>
-        <NavLink to={`${ROUTES.ip}/published`} className={"nav-link"}>
+        <NavLink to={`${ROUTES.ips}/published`} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Published"

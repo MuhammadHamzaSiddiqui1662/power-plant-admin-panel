@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
@@ -53,9 +53,7 @@ export default function StickyHeadTable({
     setSearchQuery(event.target.value.toLowerCase());
   };
 
-  const handleStatusFilterChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
+  const handleStatusFilterChange = (event: SelectChangeEvent<string>) => {
     setStatusFilter(event.target.value as string);
   };
 

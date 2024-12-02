@@ -117,7 +117,7 @@ export const userSlice = createSlice({
         state.isLoading = true;
         state.error = "";
       })
-      .addCase(updateUserThunk.fulfilled, (state, action) => {
+      .addCase(updateUserThunk.fulfilled, (state) => {
         state.isLoading = false;
       })
       .addCase(updateUserThunk.rejected, (state, action) => {
@@ -128,7 +128,7 @@ export const userSlice = createSlice({
         state.isLoading = true;
         state.error = "";
       })
-      .addCase(deleteUserThunk.fulfilled, (state, action) => {
+      .addCase(deleteUserThunk.fulfilled, (state) => {
         state.isLoading = false;
         state.error = "";
       })
