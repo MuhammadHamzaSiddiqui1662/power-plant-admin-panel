@@ -1,8 +1,6 @@
-import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { RootState } from "../../config/store";
-import { getUsersThunk, updateUserThunk } from "../../features/user/userSlice";
+import { updateUserThunk } from "../../features/user/userSlice";
 import { AppDispatch } from "../../config/store";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
@@ -12,23 +10,12 @@ import { Stack } from "@mui/material";
 import InnovatorProfileCard from "../Card/InnovatorProfileCard";
 import InvestorProfileCard from "../Card/InvestorProfileCard";
 import BrokerProfileCard from "../Card/BrokerProfileCard";
+import { useGetUserQuery } from "../../services/user";
 
 export default function UserDetails() {
   const dispatch = useDispatch<AppDispatch>();
   const { id: userId } = useParams<{ id: string }>();
-
-  const { users, isLoading, error } = useSelector(
-    (state: RootState) => state.user
-  );
-
-  const user = useMemo(
-    () => users.find((user: User) => user._id === userId),
-    [users, userId]
-  );
-
-  useEffect(() => {
-    dispatch(getUsersThunk());
-  }, [dispatch, userId]);
+  const { data: user, isLoading, error } = useGetUserQuery(userId);
 
   const handleUpdateUser = (id: string, data: Partial<User>) => {
     dispatch(updateUserThunk({ id, data }));
