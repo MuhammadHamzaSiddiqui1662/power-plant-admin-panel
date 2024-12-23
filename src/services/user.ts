@@ -1,7 +1,8 @@
-// services/user.ts
-
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { api } from "../config/axios";
 import { User } from "../types/user";
+import { BACKEND_URL } from "../config/constants";
+import { RootState } from "../config/store";
 
 const baseUrl = "/admin/users";
 
@@ -29,3 +30,41 @@ export const deleteUser = async (id: string) => {
   const response = await api.delete(`${baseUrl}/${id}`);
   return response.data;
 };
+
+export const userApi = createApi({
+  reducerPath: "userApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${BACKEND_URL}/admin/users`,
+    prepareHeaders: (headers, { getState }) => {
+      // By default, if we have a token in the store, let's use that for authenticated requests
+      const token = (getState() as RootState).auth.accessToken;
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
+  endpoints: (build) => ({
+    getFilteredUsers: build.query({
+      query: (filter = "") => `?${filter}`,
+    }),
+    getUser: build.query({
+      query: (id) => `/${id}`,
+    }),
+    updateUser: build.mutation({
+      query(body) {
+        return {
+          url: `/`,
+          method: "PUT",
+          body,
+        };
+      },
+    }),
+  }),
+});
+
+export const {
+  useGetFilteredUsersQuery,
+  useGetUserQuery,
+  useUpdateUserMutation,
+} = userApi;

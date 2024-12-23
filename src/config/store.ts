@@ -7,6 +7,7 @@ import userSlice from "../features/user/userSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { ipApi } from "../services/ip";
+import { userApi } from "../services/user";
 
 // Persist configuration for auth slice
 const authPersistConfig = {
@@ -19,13 +20,17 @@ const rootReducer = combineReducers({
   ip: ipSlice,
   [ipApi.reducerPath]: ipApi.reducer,
   user: userSlice,
+  [userApi.reducerPath]: userApi.reducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
   // @ts-ignore
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(logger).concat(ipApi.middleware),
+    getDefaultMiddleware()
+      .concat(logger)
+      .concat(ipApi.middleware)
+      .concat(userApi.middleware),
   devTools: true,
 });
 
