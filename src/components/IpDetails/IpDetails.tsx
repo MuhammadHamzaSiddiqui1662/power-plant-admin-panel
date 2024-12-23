@@ -3,17 +3,16 @@ import React, {
   FormEvent,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   getIPsThunk,
   patentIpThunk,
   updateIPDetailsThunk,
 } from "../../features/ip/ipSlice";
-import { RootState, AppDispatch } from "../../config/store";
+import { AppDispatch } from "../../config/store";
 import {
   Grid,
   styled,
