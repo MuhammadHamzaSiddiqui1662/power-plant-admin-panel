@@ -33,6 +33,7 @@ import UploadIcon from "../../assets/images/upload.png";
 import PdfIcon from "../../assets/images/pdfLogo.png";
 import { toast } from "react-toastify";
 import { api } from "../../config/axios";
+import { useGetIpQuery } from "../../services/ip";
 
 const ProfileImage = styled("img")({
   width: "100%",
@@ -135,8 +136,7 @@ const IpDetailsPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isEditing, setIsEditing] = useState(false);
   const { id } = useParams<{ id: string }>();
-  const { ips, isLoading, error } = useSelector((state: RootState) => state.ip);
-  const selectedIp = useMemo(() => ips.find((ip) => ip._id === id), [ips, id]);
+  const { data: ip, isLoading, error } = useGetIpQuery(id);
   const [patentDetails, setPatentDetails] = useState({
     patentNumber: "",
     publishedDate: ((date: Date) =>
@@ -146,14 +146,14 @@ const IpDetailsPage: React.FC = () => {
       new Date()
     ),
   });
-  const [editedIp, setEditedIp] = useState(selectedIp);
+  const [editedIp, setEditedIp] = useState(ip);
   const [editableFields, setEditableFields] = useState<Partial<IP>>({
-    name: selectedIp?.name,
-    description: selectedIp?.description,
-    categories: selectedIp?.categories,
-    publishedDate: selectedIp?.publishedDate,
-    price: selectedIp?.price,
-    status: selectedIp?.status,
+    name: ip?.name,
+    description: ip?.description,
+    categories: ip?.categories,
+    publishedDate: ip?.publishedDate,
+    price: ip?.price,
+    status: ip?.status,
   });
   const [patentDoc, setPatentDoc] = useState<File[]>([]);
 
@@ -169,12 +169,12 @@ const IpDetailsPage: React.FC = () => {
   const placeholderImage = "https://placehold.co/600x400";
 
   const handleSave = async () => {
-    if (selectedIp) {
+    if (ip) {
       const updatedIp: IP = {
-        ...selectedIp,
+        ...ip,
         ...editableFields,
-        userDetails: selectedIp.userDetails || {},
-        _id: selectedIp._id,
+        userDetails: ip.userDetails || {},
+        _id: ip._id,
       };
 
       const updatedDetails: Partial<IP> = {
@@ -186,7 +186,7 @@ const IpDetailsPage: React.FC = () => {
         status: editableFields.status,
       };
       await dispatch(
-        updateIPDetailsThunk({ ipId: selectedIp._id, details: updatedDetails })
+        updateIPDetailsThunk({ ipId: ip._id, details: updatedDetails })
       );
 
       setIsEditing(false);
@@ -209,8 +209,8 @@ const IpDetailsPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (selectedIp) {
-      if (selectedIp.status === IpStatus.AppliedForPatent) {
+    if (ip) {
+      if (ip.status === IpStatus.AppliedForPatent) {
         if (!patentDetails.patentNumber || !patentDetails.publishedDate) {
           toast.error("Please fill in all fields!");
           return console.log("error", "Please fill in all fields!");
@@ -223,16 +223,16 @@ const IpDetailsPage: React.FC = () => {
 
       const formData = new FormData();
       const payload: IP =
-        selectedIp.status === IpStatus.AppliedForPatent
+        ip.status === IpStatus.AppliedForPatent
           ? {
-              ...selectedIp,
+              ...ip,
               patentNumber: patentDetails.patentNumber,
               publishedDate: new Date(patentDetails.publishedDate),
               status: IpStatus.InActive,
             }
-          : selectedIp.status === IpStatus.Published
-          ? { ...selectedIp, status: IpStatus.Pending }
-          : { ...selectedIp, status: IpStatus.Published };
+          : ip.status === IpStatus.Published
+          ? { ...ip, status: IpStatus.Pending }
+          : { ...ip, status: IpStatus.Published };
       console.log(payload);
       formData.append("data", JSON.stringify(payload));
       const {
@@ -240,13 +240,13 @@ const IpDetailsPage: React.FC = () => {
         payload: { status },
       } = await dispatch(patentIpThunk(formData));
       if (status !== 200) return console.log("error", "Error patenting ip!");
-      if (selectedIp.status === IpStatus.AppliedForPatent) {
+      if (ip.status === IpStatus.AppliedForPatent) {
         const fileData = new FormData();
         for (const file of patentDoc) {
           fileData.append("files", file);
         }
         const { status: fileStatus } = await api.post(
-          `/email/patent-docs/${selectedIp._id}`,
+          `/email/patent-docs/${ip._id}`,
           fileData
         );
         if (fileStatus !== 200)
@@ -254,15 +254,15 @@ const IpDetailsPage: React.FC = () => {
       }
       dispatch(getIPsThunk());
       await fireServerNotification({
-        message: `Your IP ${selectedIp.name} has been ${
-          selectedIp.status === IpStatus.AppliedForPatent
+        message: `Your IP ${ip.name} has been ${
+          ip.status === IpStatus.AppliedForPatent
             ? `patented with patent#${patentDetails.patentNumber}. Find your patent documents in your email!`
-            : selectedIp.status === IpStatus.Published
+            : ip.status === IpStatus.Published
             ? "moved to pending state"
             : "published"
         }!`,
-        imageUrl: selectedIp.mainImg!,
-        userId: selectedIp.userId,
+        imageUrl: ip.mainImg!,
+        userId: ip.userId,
       });
     }
   };
@@ -278,23 +278,19 @@ const IpDetailsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getIPsThunk());
-  }, [dispatch]);
-
-  useEffect(() => {
     const updateFields = async () => {
-      await setEditedIp(selectedIp);
+      await setEditedIp(ip);
       await setEditableFields({
-        name: selectedIp?.name,
-        description: selectedIp?.description,
-        categories: selectedIp?.categories,
-        publishedDate: selectedIp?.publishedDate,
-        price: selectedIp?.price,
-        status: selectedIp?.status,
+        name: ip?.name,
+        description: ip?.description,
+        categories: ip?.categories,
+        publishedDate: ip?.publishedDate,
+        price: ip?.price,
+        status: ip?.status,
       });
     };
     updateFields();
-  }, [selectedIp]);
+  }, [ip]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -304,7 +300,7 @@ const IpDetailsPage: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
-  if (!selectedIp) {
+  if (!ip) {
     return <div>IP not found</div>;
   }
 
@@ -328,7 +324,7 @@ const IpDetailsPage: React.FC = () => {
             <CardContent>
               <div className="relative" style={{ marginBottom: 16 }}>
                 <ProfileImage
-                  src={selectedIp.mainImg!}
+                  src={ip.mainImg!}
                   alt="Main Image"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = placeholderImage;
@@ -451,67 +447,46 @@ const IpDetailsPage: React.FC = () => {
                 </ListItem>
                 <ListItem>
                   <Label>Status</Label>
-                  <Value>{selectedIp.status}</Value>
+                  <Value>{ip.status}</Value>
                 </ListItem>
               </List>
 
-              {selectedIp &&
-                selectedIp.status === IpStatus.AppliedForPatent && (
-                  <Grid
-                    container
-                    maxWidth={isEditing ? undefined : 600}
-                    spacing={2}
-                  >
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        label="Patent Number"
-                        name="patentNumber"
-                        variant="filled"
-                        size="small"
-                        fullWidth
-                        value={patentDetails.patentNumber}
-                        onChange={handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        label="Published date"
-                        name="publishedDate"
-                        variant="filled"
-                        size="small"
-                        type="date"
-                        fullWidth
-                        value={patentDetails.publishedDate}
-                        onChange={handleChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Stack direction="row" spacing={2}>
-                        {patentDoc.map((file) => (
-                          <Box
-                            key={file.name}
-                            sx={{
-                              border: "2px solid #c00",
-                              borderRadius: "8px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              cursor: "pointer",
-                              height: 100,
-                              width: 100,
-                            }}
-                          >
-                            <img src={PdfIcon} width="30%" height="30%" />
-                            <p style={{ fontSize: "0.75rem", color: "#c00" }}>
-                              {file.name}
-                            </p>
-                          </Box>
-                        ))}
-
+              {ip && ip.status === IpStatus.AppliedForPatent && (
+                <Grid
+                  container
+                  maxWidth={isEditing ? undefined : 600}
+                  spacing={2}
+                >
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      label="Patent Number"
+                      name="patentNumber"
+                      variant="filled"
+                      size="small"
+                      fullWidth
+                      value={patentDetails.patentNumber}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      label="Published date"
+                      name="publishedDate"
+                      variant="filled"
+                      size="small"
+                      type="date"
+                      fullWidth
+                      value={patentDetails.publishedDate}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Stack direction="row" spacing={2}>
+                      {patentDoc.map((file) => (
                         <Box
-                          {...getRootProps()}
+                          key={file.name}
                           sx={{
-                            border: "2px solid #ccc",
+                            border: "2px solid #c00",
                             borderRadius: "8px",
                             display: "flex",
                             justifyContent: "center",
@@ -521,36 +496,56 @@ const IpDetailsPage: React.FC = () => {
                             width: 100,
                           }}
                         >
-                          <input {...getInputProps()} />
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <img src={UploadIcon} width="30%" height="30%" />
-
-                            <p style={{ fontSize: "0.75rem", color: "#888" }}>
-                              Upload PDF
-                            </p>
-                          </Box>
+                          <img src={PdfIcon} width="30%" height="30%" />
+                          <p style={{ fontSize: "0.75rem", color: "#c00" }}>
+                            {file.name}
+                          </p>
                         </Box>
-                      </Stack>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <ApproveButton type="submit">Proceed</ApproveButton>
-                    </Grid>
+                      ))}
+
+                      <Box
+                        {...getRootProps()}
+                        sx={{
+                          border: "2px solid #ccc",
+                          borderRadius: "8px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                          height: 100,
+                          width: 100,
+                        }}
+                      >
+                        <input {...getInputProps()} />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={UploadIcon} width="30%" height="30%" />
+
+                          <p style={{ fontSize: "0.75rem", color: "#888" }}>
+                            Upload PDF
+                          </p>
+                        </Box>
+                      </Box>
+                    </Stack>
                   </Grid>
-                )}
-              {selectedIp.status === IpStatus.InActive && (
+                  <Grid item xs={12}>
+                    <ApproveButton type="submit">Proceed</ApproveButton>
+                  </Grid>
+                </Grid>
+              )}
+              {ip.status === IpStatus.InActive && (
                 <ApproveButton type="submit">Publish</ApproveButton>
               )}
-              {selectedIp.status === IpStatus.Pending && (
+              {ip.status === IpStatus.Pending && (
                 <ApproveButton type="submit">Approve</ApproveButton>
               )}
-              {selectedIp.status === IpStatus.Published && (
+              {ip.status === IpStatus.Published && (
                 <ApproveButton type="submit">Suspend</ApproveButton>
               )}
             </CardContent>
@@ -564,19 +559,19 @@ const IpDetailsPage: React.FC = () => {
               <List>
                 <ListItem>
                   <Label>Username</Label>
-                  <Value>{selectedIp.userDetails?.name || "N/A"}</Value>
+                  <Value>{ip.user?.name || "N/A"}</Value>
                 </ListItem>
                 <ListItem>
                   <Label>Email</Label>
-                  <Value>{selectedIp.userDetails?.email || "N/A"}</Value>
+                  <Value>{ip.user?.email || "N/A"}</Value>
                 </ListItem>
                 <ListItem>
                   <Label>Phone</Label>
-                  <Value>{selectedIp.userDetails?.phone || "N/A"}</Value>
+                  <Value>{ip.user?.phone || "N/A"}</Value>
                 </ListItem>
                 <ListItem>
                   <Label>Address</Label>
-                  <Value>{selectedIp.userDetails?.address || "N/A"}</Value>
+                  <Value>{ip.user?.address || "N/A"}</Value>
                 </ListItem>
               </List>
             </CardContent>
@@ -589,7 +584,7 @@ const IpDetailsPage: React.FC = () => {
             <CardContent>
               <Title>Images</Title>
               <Grid container spacing={2}>
-                {selectedIp.images.map((url) => (
+                {ip.images.map((url) => (
                   <Grid
                     item
                     xs={12}
@@ -622,7 +617,7 @@ const IpDetailsPage: React.FC = () => {
           <SectionContainer>
             <CardContent>
               <SectionTitle>Sections</SectionTitle>
-              {selectedIp.sections.map((section, index) => (
+              {ip.sections.map((section, index) => (
                 <div key={index}>
                   <Typography
                     variant="h6"
