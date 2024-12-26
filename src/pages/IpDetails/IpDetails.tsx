@@ -22,7 +22,7 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import { IP } from "../../types/ip";
+import { IP, IPSection } from "../../types/ip";
 import { IpStatus } from "../../enums";
 import { fireServerNotification } from "../../services/notification";
 import EditIcon from "@mui/icons-material/Edit";
@@ -583,7 +583,7 @@ const IpDetailsPage: React.FC = () => {
             <CardContent>
               <Title>Images</Title>
               <Grid container spacing={2}>
-                {ip.images.map((url) => (
+                {ip.images.map((url: string) => (
                   <Grid
                     item
                     xs={12}
@@ -616,7 +616,7 @@ const IpDetailsPage: React.FC = () => {
           <SectionContainer>
             <CardContent>
               <SectionTitle>Sections</SectionTitle>
-              {ip.sections.map((section, index) => (
+              {ip.sections.map((section: IPSection, index: number) => (
                 <div key={index}>
                   <Typography
                     variant="h6"

@@ -3,6 +3,8 @@ import StatsCard from "../../components/StatsCard/StatsCard";
 import { ROUTES } from "../../config/constants";
 import { NavLink } from "react-router-dom";
 import { useGetDashboardDataQuery } from "../../services/dashboard";
+import { UserStatus } from "../../types/user";
+import { IpStatus } from "../../enums";
 
 export default function Dashboard() {
   const { data, isLoading } = useGetDashboardDataQuery("");
@@ -11,7 +13,11 @@ export default function Dashboard() {
     <Box p={4} display={"flex"} flexDirection={"column"} gap={3}>
       <Typography variant="h4">Dashboard</Typography>
       <Box display={"grid"} gridTemplateColumns={"1fr 1fr 1fr"} gap={5}>
-        <NavLink to={`${ROUTES.brokers}/unapproved`} className={"nav-link"}>
+        <NavLink
+          to={`/${ROUTES.users}`}
+          state={{ brokerStatus: UserStatus.Pending }}
+          className={"nav-link"}
+        >
           <StatsCard
             variant="contained"
             title="Un Approved Brokers"
@@ -19,7 +25,11 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
         </NavLink>
-        <NavLink to={`${ROUTES.brokers}/approved`} className={"nav-link"}>
+        <NavLink
+          to={`/${ROUTES.users}`}
+          state={{ brokerStatus: UserStatus.Active }}
+          className={"nav-link"}
+        >
           <StatsCard
             variant="outlined"
             title="Approved Brokers"
@@ -27,7 +37,7 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
         </NavLink>
-        <NavLink to={ROUTES.users} className={"nav-link"}>
+        <NavLink to={`/${ROUTES.users}`} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Total Users"
@@ -35,7 +45,11 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
         </NavLink>
-        <NavLink to={`${ROUTES.ips}/appliedForPatent`} className={"nav-link"}>
+        <NavLink
+          to={`/${ROUTES.ips}`}
+          state={{ status: IpStatus.AppliedForPatent }}
+          className={"nav-link"}
+        >
           <StatsCard
             variant="outlined"
             title="Applied for patent"
@@ -43,7 +57,11 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
         </NavLink>
-        <NavLink to={`${ROUTES.ips}/published`} className={"nav-link"}>
+        <NavLink
+          to={`/${ROUTES.ips}`}
+          state={{ status: IpStatus.Published }}
+          className={"nav-link"}
+        >
           <StatsCard
             variant="outlined"
             title="Published"
@@ -51,12 +69,14 @@ export default function Dashboard() {
             isLoading={isLoading}
           />
         </NavLink>
-        <StatsCard
-          variant="contained"
-          title="Total IPs"
-          value={data?.totalIPs}
-          isLoading={isLoading}
-        />
+        <NavLink to={`/${ROUTES.ips}`} className={"nav-link"}>
+          <StatsCard
+            variant="contained"
+            title="Total IPs"
+            value={data?.totalIPs}
+            isLoading={isLoading}
+          />
+        </NavLink>
       </Box>
     </Box>
   );

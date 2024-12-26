@@ -5,11 +5,11 @@ import { AppDispatch } from "../../config/store";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { User } from "../../types/user";
-import GeneralProfileCard from "../Card/GeneralProfileCard";
+import GeneralProfileCard from "../../components/Card/GeneralProfileCard";
 import { Stack } from "@mui/material";
-import InnovatorProfileCard from "../Card/InnovatorProfileCard";
-import InvestorProfileCard from "../Card/InvestorProfileCard";
-import BrokerProfileCard from "../Card/BrokerProfileCard";
+import InnovatorProfileCard from "../../components/Card/InnovatorProfileCard";
+import InvestorProfileCard from "../../components/Card/InvestorProfileCard";
+import BrokerProfileCard from "../../components/Card/BrokerProfileCard";
 import { useGetUserQuery } from "../../services/user";
 
 export default function UserDetails() {

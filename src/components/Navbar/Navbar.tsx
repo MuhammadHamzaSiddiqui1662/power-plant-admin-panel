@@ -16,6 +16,8 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import TipsAndUpdatesOutlinedIcon from "@mui/icons-material/TipsAndUpdatesOutlined";
+import ModelTrainingOutlinedIcon from "@mui/icons-material/ModelTrainingOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../config/store";
 import { logout } from "../../features/auth/authSlice";
@@ -69,130 +71,12 @@ export default function Navbar({ width }: { width?: number }) {
             <NavLink to={ROUTES.ips} className={"nav-link"}>
               <ListItemButton>
                 <ListItemIcon>
-                  <PersonOutlineIcon />
+                  <ModelTrainingOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText>IPs</ListItemText>
               </ListItemButton>
             </NavLink>
           </ListItem>
-
-          <ListSubheader>Brokers</ListSubheader>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.brokers}/${ROUTES.approved}`}
-              className={`nav-link`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <CheckCircleOutlineIcon />
-                </ListItemIcon>
-                <ListItemText>Approved</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.brokers}/${ROUTES.unapproved}`}
-              className={`nav-link`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <DownloadingIcon />
-                </ListItemIcon>
-                <ListItemText>Un Approved</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.brokers}/${ROUTES.suspended}`}
-              className={`nav-link`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <DoDisturbIcon />
-                </ListItemIcon>
-                <ListItemText>Suspended</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-
-          <ListSubheader>Ips</ListSubheader>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.ips}/${ROUTES.published}`}
-              className={`nav-link${
-                searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) === ROUTES.published
-                  ? " active"
-                  : ""
-              }`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <DownloadingIcon />
-                </ListItemIcon>
-                <ListItemText>Published</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.ips}/${ROUTES.inactive}`}
-              className={`nav-link${
-                searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) === ROUTES.inactive
-                  ? " active"
-                  : ""
-              }`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <PauseCircleOutlineIcon />
-                </ListItemIcon>
-                <ListItemText>In Active</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.ips}/${ROUTES.pending}`}
-              className={`nav-link${
-                searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) === ROUTES.pending
-                  ? " active"
-                  : ""
-              }`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <AutoModeIcon sx={{ fontSize: 22 }} />
-                </ListItemIcon>
-                <ListItemText>Pending</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem>
-            <NavLink
-              to={`${ROUTES.ips}/${ROUTES.appliedForPatent}`}
-              className={`nav-link${
-                searchParams.get(SEARCH_PARAMS.status) &&
-                searchParams.get(SEARCH_PARAMS.status) ===
-                  ROUTES.appliedForPatent
-                  ? " active"
-                  : ""
-              }`}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <DownloadingIcon />
-                </ListItemIcon>
-                <ListItemText>Applied For Patent</ListItemText>
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-
-          <ListSubheader>Auth</ListSubheader>
           <ListItem>
             <NavLink
               to={ROUTES.signIn}

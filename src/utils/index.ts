@@ -1,4 +1,3 @@
-import { Data, SaleDeed } from "../types/saleDeed";
 import { IP } from "../types/ip";
 import { Review, User } from "../types/user";
 import { Hiring } from "../types/hiring";
@@ -16,15 +15,6 @@ export const calculateRating = (reviews: Review[]) =>
     0
   ) / reviews.length || 0;
 
-export const formatRows = (saleDeeds: SaleDeed[]): Data[] =>
-  saleDeeds.map((saleDeed) => ({
-    id: saleDeed.saleDeedId,
-    plotId: saleDeed.plot.plotId,
-    stampValue: saleDeed.saleDeedChalan.saleDeedChalanValue,
-    totalAmount: saleDeed.saleDeedTotalAmount,
-    advanceAmount: 0,
-  }));
-
 export const formatIPRows = (ips: IP[]) => {
   return ips.map((ip) => ({
     _id: ip._id,
@@ -40,16 +30,7 @@ export const formatUserRows = (users: User[]) => {
     name: user.name,
     email: user.email,
     status: user.status,
-  }));
-};
-
-export const formatBrokerRows = (users: User[]) => {
-  return users.map((user) => ({
-    id: user._id,
-    name: user.name,
-    email: user.email,
-    status: user.status,
-    brokerStatus: user.brokerStatus,
+    brokerStatus: user.brokerStatus || "-",
   }));
 };
 
