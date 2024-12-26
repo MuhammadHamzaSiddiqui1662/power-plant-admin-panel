@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import StickyHeadTable from "../../components/Table/StickyHeadTable";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES, USERS_COLUMNS } from "../../config/constants";
 import { useAppDispatch } from "../../config/store";
 import { deleteUserThunk } from "../../features/user/userSlice";
@@ -21,12 +21,15 @@ import { UserStatus } from "../../types/user";
 export default function Users() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { state } = useLocation();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     status: "",
+    brokerStatus: "",
     search: "",
     page: 1,
     limit: 10,
+    ...state,
   });
 
   const formatQueryString = useCallback(
@@ -66,29 +69,59 @@ export default function Users() {
     return () => clearTimeout(timeout);
   }, [search]);
 
+  useEffect(() => {
+    if (state) {
+      setFilters((prev: any) => ({
+        ...prev,
+        ...state,
+      }));
+    }
+  }, [state]);
+
   return (
     <Stack p={4} gap={2}>
       <Stack direction="row" justifyContent={"space-between"} spacing={2}>
         <Typography variant="h4">Users</Typography>
         {/* filters */}
-        <FormControl size="small" sx={{ width: 160 }}>
-          <InputLabel id="demo-simple-select-label">Status</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={filters.status}
-            label="Status"
-            name="status"
-            onChange={handleFilterChange}
-          >
-            <MenuItem value={""}>All</MenuItem>
-            <MenuItem value={UserStatus.Active}>{UserStatus.Active}</MenuItem>
-            <MenuItem value={UserStatus.Pending}>{UserStatus.Pending}</MenuItem>
-            <MenuItem value={UserStatus.Suspended}>
-              {UserStatus.Suspended}
-            </MenuItem>
-          </Select>
-        </FormControl>
+        <Stack direction="row" spacing={2}>
+          <FormControl size="small" sx={{ width: 160 }}>
+            <InputLabel id="demo-simple-select-label">User Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={filters.status}
+              label="User Status"
+              name="status"
+              onChange={handleFilterChange}
+            >
+              <MenuItem value={""}>All</MenuItem>
+              <MenuItem value={UserStatus.Active}>{UserStatus.Active}</MenuItem>
+              <MenuItem value={UserStatus.Pending}>
+                {UserStatus.Pending}
+              </MenuItem>
+              <MenuItem value={UserStatus.Suspended}>
+                {UserStatus.Suspended}
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl size="small" sx={{ width: 160 }}>
+            <InputLabel id="demo-simple-select-label">Broker Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={filters.brokerStatus}
+              label="Broker Status"
+              name="brokerStatus"
+              onChange={handleFilterChange}
+            >
+              <MenuItem value={""}>All</MenuItem>
+              <MenuItem value={UserStatus.Active}>{UserStatus.Active}</MenuItem>
+              <MenuItem value={UserStatus.Pending}>
+                {UserStatus.Pending}
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
       </Stack>
 
       {/* Search Bar */}

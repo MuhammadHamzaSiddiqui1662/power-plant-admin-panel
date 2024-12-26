@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import StickyHeadTable from "../../components/Table/StickyHeadTable";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IP_COLUMNS, ROUTES } from "../../config/constants";
 import { IP } from "../../types/ip";
 import { formatIPRows } from "../../utils";
@@ -19,12 +19,14 @@ import { IpStatus } from "../../enums";
 
 export default function IPs() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     status: "",
     search: "",
     page: 1,
     limit: 10,
+    ...state,
   });
 
   const formatQueryString = useCallback(
@@ -59,6 +61,15 @@ export default function IPs() {
     }, 2000);
     return () => clearTimeout(timeout);
   }, [search]);
+
+  useEffect(() => {
+    if (state) {
+      setFilters((prev: any) => ({
+        ...prev,
+        ...state,
+      }));
+    }
+  }, [state]);
 
   return (
     <Stack p={4} gap={2}>
