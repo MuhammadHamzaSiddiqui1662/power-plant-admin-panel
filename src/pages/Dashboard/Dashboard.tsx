@@ -1,14 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import StatsCard from "../../components/StatsCard/StatsCard";
-import { useAppSelector } from "../../config/store";
 import { ROUTES } from "../../config/constants";
 import { NavLink } from "react-router-dom";
+import { useGetDashboardDataQuery } from "../../services/dashboard";
 
 export default function Dashboard() {
-  const {
-    user: { users, approvedBrokers, unApprovedBrokers },
-    ip: { ips, appliedForPatentIPs, publishedIPs },
-  } = useAppSelector((state) => state);
+  const { data, isLoading } = useGetDashboardDataQuery("");
 
   return (
     <Box p={4} display={"flex"} flexDirection={"column"} gap={3}>
@@ -18,41 +15,47 @@ export default function Dashboard() {
           <StatsCard
             variant="contained"
             title="Un Approved Brokers"
-            value={unApprovedBrokers.length.toString()}
+            value={data?.unApprovedBrokers}
+            isLoading={isLoading}
           />
         </NavLink>
         <NavLink to={`${ROUTES.brokers}/approved`} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Approved Brokers"
-            value={approvedBrokers.length.toString()}
+            value={data?.approvedBrokers}
+            isLoading={isLoading}
           />
         </NavLink>
         <NavLink to={ROUTES.users} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Total Users"
-            value={users.length.toString()}
+            value={data?.totalUsers}
+            isLoading={isLoading}
           />
         </NavLink>
         <NavLink to={`${ROUTES.ips}/appliedForPatent`} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Applied for patent"
-            value={appliedForPatentIPs.length.toString()}
+            value={data?.appliedForPatentIPs}
+            isLoading={isLoading}
           />
         </NavLink>
         <NavLink to={`${ROUTES.ips}/published`} className={"nav-link"}>
           <StatsCard
             variant="outlined"
             title="Published"
-            value={publishedIPs.length.toString()}
+            value={data?.publishedIPs}
+            isLoading={isLoading}
           />
         </NavLink>
         <StatsCard
           variant="contained"
           title="Total IPs"
-          value={ips.length.toString()}
+          value={data?.totalIPs}
+          isLoading={isLoading}
         />
       </Box>
     </Box>

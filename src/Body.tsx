@@ -4,8 +4,6 @@ import Navbar from "./components/Navbar/Navbar";
 import Header from "./components/Header/Header";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./config/store";
-import { getIPsThunk } from "./features/ip/ipSlice";
-import { getUsersThunk } from "./features/user/userSlice";
 import { api } from "./config/axios";
 import { logout, refreshTokenThunk } from "./features/auth/authSlice";
 import { ROUTES } from "./config/constants";
@@ -21,8 +19,6 @@ export default function Body() {
 
   useEffect(() => {
     if (!accessToken) return navigate(`/${ROUTES.signIn}`);
-    dispatch(getIPsThunk());
-    dispatch(getUsersThunk());
   }, [accessToken]);
 
   useEffect(() => {

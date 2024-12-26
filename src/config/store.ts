@@ -8,6 +8,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { ipApi } from "../services/ip";
 import { userApi } from "../services/user";
+import { dashboardApi } from "../services/dashboard";
 
 // Persist configuration for auth slice
 const authPersistConfig = {
@@ -17,6 +18,7 @@ const authPersistConfig = {
 
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authSlice),
+  [dashboardApi.reducerPath]: dashboardApi.reducer,
   ip: ipSlice,
   [ipApi.reducerPath]: ipApi.reducer,
   user: userSlice,
@@ -29,6 +31,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(logger)
+      .concat(dashboardApi.middleware)
       .concat(ipApi.middleware)
       .concat(userApi.middleware),
   devTools: true,
