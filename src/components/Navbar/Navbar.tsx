@@ -5,25 +5,17 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListSubheader,
 } from "@mui/material";
-import { NavLink, useSearchParams } from "react-router-dom";
-import { ROUTES, SEARCH_PARAMS } from "../../config/constants";
-import DownloadingIcon from "@mui/icons-material/Downloading";
-import AutoModeIcon from "@mui/icons-material/AutoMode";
-import PauseCircleOutlineIcon from "@mui/icons-material/PauseCircleOutline";
+import { NavLink } from "react-router-dom";
+import { ROUTES } from "../../config/constants";
 import GridViewIcon from "@mui/icons-material/GridView";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import DoDisturbIcon from "@mui/icons-material/DoDisturb";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import TipsAndUpdatesOutlinedIcon from "@mui/icons-material/TipsAndUpdatesOutlined";
 import ModelTrainingOutlinedIcon from "@mui/icons-material/ModelTrainingOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAppDispatch } from "../../config/store";
 import { logout } from "../../features/auth/authSlice";
 
 export default function Navbar({ width }: { width?: number }) {
-  let [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
   return (

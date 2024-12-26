@@ -4,12 +4,50 @@ import { Rating, Stack, styled, Typography } from "@mui/material";
 import { useAppDispatch } from "../../config/store";
 import { IP } from "../../types/ip";
 import StickyHeadTable from "../Table/StickyHeadTable";
-import { HIRINGS_COLUMNS, ROUTES, SEARCH_PARAMS } from "../../config/constants";
+import { HIRINGS_COLUMNS, ROUTES } from "../../config/constants";
 import { calculateRating, formatHiringRows } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import ReviewCard from "./ReviewCard";
 import { getUserHiringsThunk } from "../../features/user/userSlice";
 import { Hiring } from "../../types/hiring";
+
+const CardContainer = styled("div")({
+  borderRadius: "16px",
+  backgroundColor: "#fff",
+  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  overflow: "hidden",
+  transition: "box-shadow 0.3s ease-in-out",
+  "&:hover": {
+    boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
+  },
+});
+
+const CardContent = styled("div")({
+  padding: "24px",
+  backgroundColor: "#f9f9f9",
+});
+
+const List = styled("ul")({
+  paddingTop: "16px",
+  listStyle: "none",
+});
+
+const ListItem = styled("li")({
+  marginBottom: "12px",
+});
+
+const Label = styled("span")({
+  fontSize: "0.75rem",
+  color: "#888",
+  display: "block",
+  marginBottom: "4px",
+});
+
+const Value = styled("p")({
+  fontSize: "1rem",
+  fontWeight: "500",
+  color: "#444",
+});
 
 interface CardProps {
   user: User;
@@ -25,7 +63,7 @@ const InvestorProfileCard: React.FC<CardProps> = ({ user }) => {
   );
 
   const handleRowClick = (row: IP) => {
-    navigate(`../${row._id}?${SEARCH_PARAMS.status}=${ROUTES.published}`);
+    navigate(`/${ROUTES.users}/${row._id}`);
   };
 
   useEffect(() => {
@@ -33,48 +71,9 @@ const InvestorProfileCard: React.FC<CardProps> = ({ user }) => {
       const { payload: hirings } = await dispatch(
         getUserHiringsThunk(user._id)
       );
-      console.log("hirings", hirings);
       setHirings(hirings as Hiring[]);
     })();
   }, [dispatch]);
-
-  const CardContainer = styled("div")({
-    borderRadius: "16px",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-    overflow: "hidden",
-    transition: "box-shadow 0.3s ease-in-out",
-    "&:hover": {
-      boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
-    },
-  });
-
-  const CardContent = styled("div")({
-    padding: "24px",
-    backgroundColor: "#f9f9f9",
-  });
-
-  const List = styled("ul")({
-    paddingTop: "16px",
-    listStyle: "none",
-  });
-
-  const ListItem = styled("li")({
-    marginBottom: "12px",
-  });
-
-  const Label = styled("span")({
-    fontSize: "0.75rem",
-    color: "#888",
-    display: "block",
-    marginBottom: "4px",
-  });
-
-  const Value = styled("p")({
-    fontSize: "1rem",
-    fontWeight: "500",
-    color: "#444",
-  });
 
   return (
     <CardContainer>

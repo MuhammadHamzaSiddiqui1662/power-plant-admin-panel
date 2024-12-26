@@ -26,6 +26,7 @@ export default function UserDetails() {
   }
 
   if (error) {
+    // @ts-ignore
     return <Typography color="error">Error: {error}</Typography>;
   }
 

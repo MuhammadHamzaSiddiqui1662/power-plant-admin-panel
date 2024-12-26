@@ -296,6 +296,7 @@ const IpDetailsPage: React.FC = () => {
   }
 
   if (error) {
+    // @ts-ignore
     return <div>Error: {error}</div>;
   }
 
