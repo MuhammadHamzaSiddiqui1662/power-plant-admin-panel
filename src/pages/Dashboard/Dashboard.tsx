@@ -19,7 +19,7 @@ export default function Dashboard() {
           className={"nav-link"}
         >
           <StatsCard
-            variant="contained"
+            variant="outlined"
             title="Un Approved Brokers"
             value={data?.unApprovedBrokers}
             isLoading={isLoading}
@@ -71,7 +71,7 @@ export default function Dashboard() {
         </NavLink>
         <NavLink to={`/${ROUTES.ips}`} className={"nav-link"}>
           <StatsCard
-            variant="contained"
+            variant="outlined"
             title="Total IPs"
             value={data?.totalIPs}
             isLoading={isLoading}
